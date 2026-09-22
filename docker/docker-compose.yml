@@ -1,0 +1,56 @@
+# Docker Compose danh cho trien khai (SPEC muc 7). O local dev, khong bat buoc dung
+# file nay - co the chay backend truc tiep bang Maven, ket noi vao Postgres da cai
+# san tren may (xem backend/README.md). File nay dung khi muon test full-stack
+# dong bo hoac khi trien khai len may chu Rocky Linux (ML110).
+#
+# Ghi chu ve pg_cron: image postgres chinh thuc KHONG kem pg_cron. O production tren
+# ML110, thay "postgres:17-alpine" bang mot image co san pg_cron (vi du build them
+# 1 layer tu image chinh thuc cai package postgresql-<ver>-cron tu kho PGDG, khai bao
+# shared_preload_libraries=pg_cron trong postgresql.conf). O day tam dung image goc,
+# he thong dang chay fallback Spring @Scheduled cho lich quet MoU (xem SPEC muc 10).
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME:-htkhcn}
+      POSTGRES_USER: ${DB_USERNAME:-htkhcn_app}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-htkhcn_app}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-htkhcn_app} -d ${DB_NAME:-htkhcn}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/${DB_NAME:-htkhcn}
+      DB_USERNAME: ${DB_USERNAME:-htkhcn_app}
+      DB_PASSWORD: ${DB_PASSWORD:-htkhcn_app}
+      JWT_SECRET: ${JWT_SECRET}
+      MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_ENABLED: ${MAIL_ENABLED:-false}
+      APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:5173}
+    ports:
+      - "8080:8080"
+
+  # TODO (giai doan Frontend): them service `frontend` build React tinh + Nginx
+  # reverse proxy /api/... sang backend, dung dung dang SPEC muc 7.2.
+
+volumes:
+  pgdata:
