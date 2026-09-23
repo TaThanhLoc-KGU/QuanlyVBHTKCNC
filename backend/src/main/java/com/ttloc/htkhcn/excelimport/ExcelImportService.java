@@ -101,12 +101,42 @@ public class ExcelImportService {
         return new ImportConfirmResponse(phien.getId(), dong.size(), thanhCong, loi.size(), loi);
     }
 
+    // Ten sheet ung vien cho tung module - file mau P.HTKHCN dung 1 workbook
+    // GOM CA 5 sheet (moi module 1 sheet, dat ten giong nhau giua cac nam), nen
+    // phai chon dung sheet theo module dang import thay vi luon doc sheet dau
+    // tien - neu khong, chon module "Doan vao"/"Doan ra" tren 1 file nhu vay se
+    // vo tinh doc nham sheet "VB DHKG" (sheet dau) va bao loi "thieu truong" hang
+    // loat du du lieu that su nam o sheet khac trong cung file.
+    private static final Map<ModuleKey, List<String>> TEN_SHEET_UNG_VIEN = Map.of(
+            ModuleKey.DOI_TAC, List.of("Doi tac"),
+            ModuleKey.VAN_BAN_DHKG, List.of("VB DHKG", "Van ban DHKG"),
+            ModuleKey.VBPL_VN, List.of("VBPL VN"),
+            ModuleKey.MOU, List.of("MoU"),
+            ModuleKey.DOAN_VAO, List.of("Doan vao"),
+            ModuleKey.DOAN_RA, List.of("Doan ra"));
+
+    private Sheet timSheet(Workbook wb, ModuleKey moDun) {
+        List<String> tenUngVien = TEN_SHEET_UNG_VIEN.getOrDefault(moDun, List.of());
+        for (int i = 0; i < wb.getNumberOfSheets(); i++) {
+            Sheet sheet = wb.getSheetAt(i);
+            String tenChuan = ExcelUtils.chuanHoa(sheet.getSheetName());
+            for (String ung : tenUngVien) {
+                if (tenChuan.equals(ExcelUtils.chuanHoa(ung))) {
+                    return sheet;
+                }
+            }
+        }
+        // Khong khop ten sheet nao (file don gian chi co 1 sheet, ten tuy y) -
+        // giu hanh vi cu: doc sheet dau tien.
+        return wb.getSheetAt(0);
+    }
+
     private List<ImportRowResult> parseFile(ModuleKey moDun, MultipartFile file) {
         if (file == null || file.isEmpty()) {
             throw new BadRequestException("File Excel khong duoc de trong");
         }
         try (InputStream is = file.getInputStream(); Workbook wb = WorkbookFactory.create(is)) {
-            Sheet sheet = wb.getSheetAt(0);
+            Sheet sheet = timSheet(wb, moDun);
             Map<String, Integer> header = ExcelUtils.docHeader(sheet);
             List<ImportRowResult> ketQua = new ArrayList<>();
             int soDongCuoi = sheet.getLastRowNum();
@@ -266,8 +296,8 @@ public class ExcelImportService {
         String tenDoiTac = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Doi tac lien quan", "Doi tac"));
         LocalDate thoiGianDen = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian den"));
         LocalDate thoiGianDi = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian di"));
-        Integer soNuocNgoai = ExcelUtils.getCellInt(row, ExcelUtils.timCot(h, "So luong nguoi nuoc ngoai"));
-        Integer soVietNam = ExcelUtils.getCellInt(row, ExcelUtils.timCot(h, "So luong nguoi viet nam"));
+        Integer soNuocNgoai = ExcelUtils.getCellInt(row, ExcelUtils.timCot(h, "So luong nguoi nuoc ngoai", "So luong NNN"));
+        Integer soVietNam = ExcelUtils.getCellInt(row, ExcelUtils.timCot(h, "So luong nguoi viet nam", "So luong nguoi VN"));
         String quocTichText = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Quoc tich"));
         String noiDung = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Noi dung lam viec"));
 
@@ -317,7 +347,8 @@ public class ExcelImportService {
 
     private ImportRowResult parseDoanRa(Row row, Map<String, Integer> h, int soDong) {
         List<String> loi = new ArrayList<>();
-        String tenDoiTac = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Don vi lam viec", "Doi tac"));
+        String tenDoiTac = ExcelUtils.getCellString(
+                row, ExcelUtils.timCot(h, "Don vi lam viec", "Doi tac", "Ten don vi lam viec nn"));
         LocalDate thoiGianDi = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian di"));
         LocalDate thoiGianVe = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian ve"));
         String diaDiemDi = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Dia diem di"));

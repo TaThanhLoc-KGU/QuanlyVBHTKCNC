@@ -71,13 +71,28 @@ public final class ExcelUtils {
         if (cell == null) {
             return null;
         }
+        if (cell.getCellType() == CellType.FORMULA) {
+            // Doc GIA TRI DA TINH (cache trong file), khong phai chuoi cong
+            // thuc - file mau thuc te dung cong thuc STT tu dong keo xuong ca
+            // tram dong template (vd IF(B3<>"", ..., "")), neu tra ve chuoi
+            // cong thuc thi laDongTrong() se coi moi dong template la "co du
+            // lieu" (vi chuoi cong thuc khong bao gio rong) du cot do TINH RA
+            // rong, khien hang loat dong trong bi doc nham thanh dong loi.
+            return switch (cell.getCachedFormulaResultType()) {
+                case STRING -> cell.getStringCellValue().trim();
+                case NUMERIC -> DateUtil.isCellDateFormatted(cell)
+                        ? cell.getLocalDateTimeCellValue().toLocalDate().toString()
+                        : stripTrailingZero(cell.getNumericCellValue());
+                case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+                default -> null;
+            };
+        }
         return switch (cell.getCellType()) {
             case STRING -> cell.getStringCellValue().trim();
             case NUMERIC -> DateUtil.isCellDateFormatted(cell)
                     ? cell.getLocalDateTimeCellValue().toLocalDate().toString()
                     : stripTrailingZero(cell.getNumericCellValue());
             case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
-            case FORMULA -> cell.getCellFormula();
             default -> null;
         };
     }
