@@ -15,6 +15,7 @@ import { CauHinhPage } from './pages/CauHinhPage'
 import { CrawlPhapLuatPage } from './pages/CrawlPhapLuatPage'
 import { CongVanDongBoPage } from './pages/CongVanDongBoPage'
 import { CongVanDenPage } from './pages/CongVanDenPage'
+import { TuDienPage } from './pages/TuDienPage'
 
 export default function App() {
   return (
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/doan-vao" element={<DoanVaoPage />} />
           <Route path="/doan-ra" element={<DoanRaPage />} />
           <Route path="/import" element={<ImportExcelPage />} />
+          <Route path="/tu-dien" element={<TuDienPage />} />
           <Route path="/bao-cao" element={<BaoCaoPage />} />
           <Route
             path="/nguoi-dung"

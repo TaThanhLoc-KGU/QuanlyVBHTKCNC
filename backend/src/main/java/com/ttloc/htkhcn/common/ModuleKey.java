@@ -8,5 +8,6 @@ public enum ModuleKey {
     MOU,
     DOAN_VAO,
     DOAN_RA,
-    CONG_VAN_DEN
+    CONG_VAN_DEN,
+    TU_DIEN
 }

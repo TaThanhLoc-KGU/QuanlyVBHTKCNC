@@ -90,6 +90,8 @@ public class ImportRowWriter {
             case DOAN_RA -> doanRaService.tao((DoanRaRequest) doiTuong).id();
             case CONG_VAN_DEN -> throw new com.ttloc.htkhcn.common.exception.BadRequestException(
                     "Cong van den khong ho tro nhap tu Excel");
+            case TU_DIEN -> throw new com.ttloc.htkhcn.common.exception.BadRequestException(
+                    "Tu dien khong ho tro nhap tu Excel");
         };
         phienImportBanGhiService.ghiNhan(phienId, moDun, idMoi);
         return idMoi;

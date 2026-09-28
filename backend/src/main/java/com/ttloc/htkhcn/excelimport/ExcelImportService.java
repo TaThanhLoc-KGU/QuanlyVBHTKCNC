@@ -172,6 +172,8 @@ public class ExcelImportService {
             case DOAN_RA -> parseDoanRa(row, header, soDong);
             case CONG_VAN_DEN -> throw new BadRequestException(
                     "Cong van den khong ho tro nhap tu Excel - du lieu duoc dong bo tu he thong CongVan cua truong");
+            case TU_DIEN -> throw new BadRequestException(
+                    "Tu dien khong ho tro nhap tu Excel - quan ly truc tiep qua man hinh Tu dien");
         };
     }
 

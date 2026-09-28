@@ -29,6 +29,7 @@ const TUY_CHON_MODULE: { value: ModuleKey; label: string }[] = [
   { value: 'DOAN_VAO', label: 'Đoàn vào' },
   { value: 'DOAN_RA', label: 'Đoàn ra' },
   { value: 'CONG_VAN_DEN', label: 'Công văn đến' },
+  { value: 'TU_DIEN', label: 'Tự điển' },
 ]
 
 const NHAN_MODULE: Record<ModuleKey, string> = Object.fromEntries(

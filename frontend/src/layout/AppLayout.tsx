@@ -4,6 +4,7 @@ import { Avatar, Button, Drawer, Dropdown, Layout, Menu, Typography } from 'antd
 import {
   BankOutlined,
   CloudSyncOutlined,
+  BookOutlined,
   DashboardOutlined,
   DownOutlined,
   FileExcelOutlined,
@@ -78,6 +79,7 @@ export function AppLayout() {
       { key: '/doan-vao', icon: <GlobalOutlined />, label: <Link to="/doan-vao">Đoàn vào</Link> },
       { key: '/doan-ra', icon: <SendOutlined />, label: <Link to="/doan-ra">Đoàn ra</Link> },
       { key: '/import', icon: <FileExcelOutlined />, label: <Link to="/import">Nhập Excel</Link> },
+      { key: '/tu-dien', icon: <BookOutlined />, label: <Link to="/tu-dien">Tự điển</Link> },
       { key: '/bao-cao', icon: <BankOutlined />, label: <Link to="/bao-cao">Báo cáo</Link> },
       ...(laAdmin
         ? [

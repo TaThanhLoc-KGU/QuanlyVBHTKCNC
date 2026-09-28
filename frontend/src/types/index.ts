@@ -1,7 +1,43 @@
 // Cac kieu du lieu khop voi DTO tra ve tu backend (Jackson serialize camelCase).
 
 export type VaiTro = 'ADMIN' | 'EDITOR' | 'VIEWER' | string
-export type ModuleKey = 'DOI_TAC' | 'VAN_BAN_DHKG' | 'VBPL_VN' | 'MOU' | 'DOAN_VAO' | 'DOAN_RA' | 'CONG_VAN_DEN'
+export type ModuleKey =
+  | 'DOI_TAC'
+  | 'VAN_BAN_DHKG'
+  | 'VBPL_VN'
+  | 'MOU'
+  | 'DOAN_VAO'
+  | 'DOAN_RA'
+  | 'CONG_VAN_DEN'
+  | 'TU_DIEN'
+
+export type LoaiTuDien =
+  | 'MUC_TIEU_DOAN_RA'
+  | 'MAU_CONG_VAN_QUYET_DINH'
+  | 'MUC_DICH_DEN'
+  | 'NGUON_KINH_PHI'
+  | 'NOI_GUI_CONG_VAN_DEN'
+  | 'NOI_GUI_CONG_VAN_DEN_BO_SUNG'
+  | 'QUOC_GIA'
+  | 'TIEN_TE'
+  | 'HOAT_DONG_KY_KET'
+  | 'NGON_NGU_KY_KET'
+  | 'VAI_TRO_THANH_VIEN'
+  | 'LOAI_DOI_TAC'
+  | 'LOAI_SU_KIEN'
+  | 'LINH_VUC_HOAT_DONG'
+
+export interface TuDien {
+  id: string
+  loai: LoaiTuDien
+  ma: string | null
+  ten: string
+  moTa: string | null
+  thuTu: number
+  hoatDong: boolean
+  ngayTao: string
+  ngaySua: string | null
+}
 
 export interface PageResponse<T> {
   content: T[]
