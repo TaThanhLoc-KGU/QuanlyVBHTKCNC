@@ -1,5 +1,5 @@
 import { api } from './client'
-import type { BaoCaoDoanRaVao, BaoCaoMouTrongNam, Mou, PageResponse } from '../types'
+import type { BaoCaoDoanRaVao, BaoCaoMouTrongNam, Mou, PageResponse, LichSuThayDoi } from '../types'
 
 export function baoCaoMouTrongNam(nam: number) {
   return api.get<BaoCaoMouTrongNam>('/bao-cao/mou-trong-nam', { params: { nam } }).then((r) => r.data)

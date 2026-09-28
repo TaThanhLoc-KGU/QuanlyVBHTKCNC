@@ -111,7 +111,7 @@ function TabUngVien() {
     form.resetFields()
   }
 
-  function xuLySubmit(values: Record<string, unknown>) {
+  function xuLySubmit(values: any) {
     if (!dangNhan) return
     const body: VanBanRequest = {
       ...(values as VanBanRequest),
