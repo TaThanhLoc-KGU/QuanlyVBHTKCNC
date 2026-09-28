@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { Button, List, Popconfirm, Typography, Upload, message } from 'antd'
-import { DeleteOutlined, DownloadOutlined, UploadOutlined } from '@ant-design/icons'
+import { Button, List, Popconfirm, Tooltip, Typography, Upload, message } from 'antd'
+import { DeleteOutlined, DownloadOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons'
 import * as taiLieuApi from '../api/taiLieu'
 import type { BangDinhKem } from '../api/taiLieu'
 import { thongBaoLoi } from '../api/client'
@@ -56,6 +56,14 @@ export function AttachmentPanel({ bang, banGhiId, choPhepSua }: Props) {
     }
   }
 
+  async function xuLyXem(id: string) {
+    try {
+      await taiLieuApi.xemDinhKem(id)
+    } catch {
+      message.error('Không xem được file này')
+    }
+  }
+
   return (
     <div>
       {choPhepSua && (
@@ -74,12 +82,16 @@ export function AttachmentPanel({ bang, banGhiId, choPhepSua }: Props) {
         renderItem={(tl) => (
           <List.Item
             actions={[
-              <Button
-                key="tai-xuong"
-                type="link"
-                icon={<DownloadOutlined />}
-                onClick={() => xuLyTaiXuong(tl.id, tl.tenFile)}
-              />,
+              ...(taiLieuApi.coTheXemTrucTuyen(tl.loaiMime)
+                ? [
+                    <Tooltip key="xem" title="Xem trực tuyến">
+                      <Button type="link" icon={<EyeOutlined />} onClick={() => xuLyXem(tl.id)} />
+                    </Tooltip>,
+                  ]
+                : []),
+              <Tooltip key="tai-xuong" title="Tải xuống">
+                <Button type="link" icon={<DownloadOutlined />} onClick={() => xuLyTaiXuong(tl.id, tl.tenFile)} />
+              </Tooltip>,
               ...(choPhepSua
                 ? [
                     <Popconfirm key="xoa" title="Xóa file này?" onConfirm={() => xuLyXoa(tl.id)}>

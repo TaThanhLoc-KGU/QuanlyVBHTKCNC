@@ -28,7 +28,7 @@ import com.ttloc.htkhcn.security.SecurityUser;
 
 import lombok.RequiredArgsConstructor;
 
-/** Dinh kem tai lieu cho Van ban DHKG / VBPL VN / MoU (SPEC muc 4.5). */
+/** Dinh kem tai lieu dung chung cho nhieu module (xem BangDinhKem) - SPEC muc 4.5. */
 @RestController
 @RequestMapping("/api/tai-lieu-dinh-kem")
 @RequiredArgsConstructor
@@ -54,6 +54,18 @@ public class TaiLieuDinhKemController {
 
     @GetMapping("/{id}/tai-xuong")
     public ResponseEntity<Resource> taiXuong(@PathVariable UUID id) {
+        return docFile(id, "attachment");
+    }
+
+    /** Xem truc tiep tren trinh duyet (khong ep tai xuong) - chi hien thi duoc
+     * voi cac loai trinh duyet tu render (PDF, anh...), cac loai khac (docx,
+     * xlsx...) trinh duyet se tu quyet dinh tai xuong nhu binh thuong. */
+    @GetMapping("/{id}/xem")
+    public ResponseEntity<Resource> xem(@PathVariable UUID id) {
+        return docFile(id, "inline");
+    }
+
+    private ResponseEntity<Resource> docFile(UUID id, String kieuHienThi) {
         TaiLieuDinhKem tl = taiLieuDinhKemService.layTheoId(id);
         Resource resource = new FileSystemResource(Path.of(tl.getDuongDan()));
         if (!resource.exists()) {
@@ -63,7 +75,7 @@ public class TaiLieuDinhKemController {
         String tenFileEncoded = java.net.URLEncoder.encode(tl.getTenFile(), StandardCharsets.UTF_8);
         return ResponseEntity.ok()
                 .contentType(tl.getLoaiMime() != null ? MediaType.parseMediaType(tl.getLoaiMime()) : MediaType.APPLICATION_OCTET_STREAM)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename*=UTF-8''" + tenFileEncoded)
+                .header(HttpHeaders.CONTENT_DISPOSITION, kieuHienThi + "; filename*=UTF-8''" + tenFileEncoded)
                 .body(resource);
     }
 

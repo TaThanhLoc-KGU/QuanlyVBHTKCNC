@@ -1,7 +1,7 @@
 import { api } from './client'
 import type { TaiLieuDinhKem } from '../types'
 
-export type BangDinhKem = 'van_ban_dhkg' | 'vbpl_vn' | 'mou' | 'cong_van_den'
+export type BangDinhKem = 'van_ban_dhkg' | 'vbpl_vn' | 'mou' | 'cong_van_den' | 'doan_vao' | 'doan_ra'
 
 export function danhSachDinhKem(bang: BangDinhKem, banGhiId: string) {
   return api.get<TaiLieuDinhKem[]>('/tai-lieu-dinh-kem', { params: { bang, banGhiId } }).then((r) => r.data)
@@ -32,4 +32,31 @@ export async function taiXuongDinhKem(id: string, tenFile: string) {
   a.click()
   a.remove()
   window.URL.revokeObjectURL(url)
+}
+
+/** Cac loai file trinh duyet tu render duoc truc tiep (PDF, anh) - cac loai
+ * khac (docx, xlsx...) trinh duyet se tu tai xuong du server tra ve inline. */
+export function coTheXemTrucTuyen(loaiMime: string | null) {
+  if (!loaiMime) return false
+  return loaiMime === 'application/pdf' || loaiMime.startsWith('image/')
+}
+
+/** Mo tab moi TRUOC (dong bo, trong luc con trong tieng dong click cua nguoi
+ * dung) roi moi gan URL sau khi fetch xong blob - neu goi window.open() sau
+ * khi await xong, trinh duyet coi la khong con trong "user gesture" nua va
+ * chan popup. */
+export async function xemDinhKem(id: string) {
+  const tabMoi = window.open('', '_blank')
+  try {
+    const res = await api.get(`/tai-lieu-dinh-kem/${id}/xem`, { responseType: 'blob' })
+    const url = window.URL.createObjectURL(res.data as Blob)
+    if (tabMoi) {
+      tabMoi.location.href = url
+    } else {
+      window.open(url, '_blank')
+    }
+  } catch (err) {
+    tabMoi?.close()
+    throw err
+  }
 }

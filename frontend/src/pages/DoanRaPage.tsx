@@ -10,6 +10,7 @@ import {
   Popconfirm,
   Space,
   Table,
+  Tabs,
   Typography,
   message,
 } from 'antd'
@@ -20,6 +21,7 @@ import type { DoanRa, DoanRaRequest } from '../types'
 import { useAuth } from '../auth/AuthContext'
 import { thongBaoLoi } from '../api/client'
 import { AuditHistoryDrawer } from '../components/AuditHistoryDrawer'
+import { AttachmentPanel } from '../components/AttachmentPanel'
 import { DoiTacSelect } from '../components/DoiTacSelect'
 
 export function DoanRaPage() {
@@ -80,7 +82,7 @@ export function DoanRaPage() {
     form.resetFields()
   }
 
-  function xuLySubmit(values: Record<string, unknown>) {
+  function xuLySubmit(values: any) {
     const body: DoanRaRequest = {
       ...(values as DoanRaRequest),
       thoiGianDi: dayjs(values.thoiGianDi as dayjs.Dayjs).format('YYYY-MM-DD'),
@@ -161,45 +163,77 @@ export function DoanRaPage() {
         ]}
       />
 
-      <Drawer title={dangSua ? 'Sửa đoàn ra' : 'Thêm đoàn ra'} open={moForm} onClose={dongForm} width={520}>
-        <Form form={form} layout="vertical" onFinish={xuLySubmit}>
-          <Form.Item name="doiTacId" label="Đơn vị làm việc (đối tác)" rules={[{ required: true, message: 'Bắt buộc' }]}>
-            <DoiTacSelect />
-          </Form.Item>
-          <Space size={16}>
-            <Form.Item name="thoiGianDi" label="Thời gian đi" rules={[{ required: true, message: 'Bắt buộc' }]}>
-              <DatePicker format="DD/MM/YYYY" />
-            </Form.Item>
-            <Form.Item name="thoiGianVe" label="Thời gian về" rules={[{ required: true, message: 'Bắt buộc' }]}>
-              <DatePicker format="DD/MM/YYYY" />
-            </Form.Item>
-          </Space>
-          <Space size={16}>
-            <Form.Item name="diaDiemDi" label="Địa điểm đi">
-              <Input />
-            </Form.Item>
-            <Form.Item name="diaDiemDen" label="Địa điểm đến">
-              <Input />
-            </Form.Item>
-          </Space>
-          <Form.Item name="quocGiaLamViec" label="Quốc gia làm việc" rules={[{ required: true, message: 'Bắt buộc' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item name="soLuongDoan" label="Số lượng đoàn" rules={[{ required: true, message: 'Bắt buộc' }]}>
-            <InputNumber min={1} />
-          </Form.Item>
-          <Form.Item name="thanhPhan" label="Thành phần (danh sách thành viên)">
-            <Input.TextArea rows={3} />
-          </Form.Item>
-          <Form.Item name="noiDungLamViec" label="Nội dung làm việc">
-            <Input.TextArea rows={3} />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={luuMutation.isPending} block>
-              Lưu
-            </Button>
-          </Form.Item>
-        </Form>
+      <Drawer title={dangSua ? 'Sửa đoàn ra' : 'Thêm đoàn ra'} open={moForm} onClose={dongForm} width={560}>
+        <Tabs
+          items={[
+            {
+              key: 'thong-tin',
+              label: 'Thông tin',
+              children: (
+                <Form form={form} layout="vertical" onFinish={xuLySubmit}>
+                  <Form.Item
+                    name="doiTacId"
+                    label="Đơn vị làm việc (đối tác)"
+                    rules={[{ required: true, message: 'Bắt buộc' }]}
+                  >
+                    <DoiTacSelect />
+                  </Form.Item>
+                  <Space size={16}>
+                    <Form.Item name="thoiGianDi" label="Thời gian đi" rules={[{ required: true, message: 'Bắt buộc' }]}>
+                      <DatePicker format="DD/MM/YYYY" />
+                    </Form.Item>
+                    <Form.Item name="thoiGianVe" label="Thời gian về" rules={[{ required: true, message: 'Bắt buộc' }]}>
+                      <DatePicker format="DD/MM/YYYY" />
+                    </Form.Item>
+                  </Space>
+                  <Space size={16}>
+                    <Form.Item name="diaDiemDi" label="Địa điểm đi">
+                      <Input />
+                    </Form.Item>
+                    <Form.Item name="diaDiemDen" label="Địa điểm đến">
+                      <Input />
+                    </Form.Item>
+                  </Space>
+                  <Form.Item
+                    name="quocGiaLamViec"
+                    label="Quốc gia làm việc"
+                    rules={[{ required: true, message: 'Bắt buộc' }]}
+                  >
+                    <Input />
+                  </Form.Item>
+                  <Form.Item name="soLuongDoan" label="Số lượng đoàn" rules={[{ required: true, message: 'Bắt buộc' }]}>
+                    <InputNumber min={1} />
+                  </Form.Item>
+                  <Form.Item name="thanhPhan" label="Thành phần (danh sách thành viên)">
+                    <Input.TextArea rows={3} />
+                  </Form.Item>
+                  <Form.Item name="noiDungLamViec" label="Nội dung làm việc">
+                    <Input.TextArea rows={3} />
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit" loading={luuMutation.isPending} block>
+                      Lưu
+                    </Button>
+                  </Form.Item>
+                  {!dangSua && (
+                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                      Sau khi lưu, mở lại để đính kèm file (công văn, quyết định cử đi...) ở tab "File đính kèm".
+                    </Typography.Text>
+                  )}
+                </Form>
+              ),
+            },
+            ...(dangSua
+              ? [
+                  {
+                    key: 'dinh-kem',
+                    label: 'File đính kèm',
+                    children: <AttachmentPanel bang="doan_ra" banGhiId={dangSua.id} choPhepSua={duocSua} />,
+                  },
+                ]
+              : []),
+          ]}
+        />
       </Drawer>
 
       <AuditHistoryDrawer open={!!lichSuId} onClose={() => setLichSuId(null)} bang="doan_ra" banGhiId={lichSuId} />

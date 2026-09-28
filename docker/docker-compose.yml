@@ -1,7 +1,19 @@
 # Docker Compose danh cho trien khai (SPEC muc 7). O local dev, khong bat buoc dung
 # file nay - co the chay backend truc tiep bang Maven, ket noi vao Postgres da cai
 # san tren may (xem backend/README.md). File nay dung khi muon test full-stack
-# dong bo hoac khi trien khai len may chu Rocky Linux (ML110).
+# dong bo hoac khi trien khai len may chu Rocky Linux (ML110, aaPanel).
+#
+# Trien khai tren aaPanel: container "frontend" (1) duoc gan them vao network
+# "baota_net" (network dung chung aaPanel tao cho cac app Docker cua no, de
+# Nginx Proxy Manager co san tro toi bang ten container "ktkhcn_frontend" cong
+# 80 neu dung cach do), VA (2) publish them 1 cong ra 127.0.0.1 tren host de
+# nginx GOC cua aaPanel (chay truc tiep tren host, khong nam trong network
+# Docker nao) co the reverse-proxy toi qua "Website" (site) thuong cua aaPanel -
+# dung cach nao cung duoc, tuy quy uoc dang dung tren server. Bind 127.0.0.1
+# (khong phai 0.0.0.0) de khong lo port nay ra internet, chi nginx tren chinh
+# host nay moi goi toi duoc. Postgres KHONG publish port ra host - chi backend
+# trong cung docker network moi can ket noi toi, tranh dung port 5432 voi
+# Postgres khac tren cung server (server nay da co qtcsvc-postgres dung port do).
 #
 # Ghi chu ve pg_cron: image postgres chinh thuc KHONG kem pg_cron. O production tren
 # ML110, thay "postgres:17-alpine" bang mot image co san pg_cron (vi du build them
@@ -19,8 +31,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-htkhcn_app}
     volumes:
       - pgdata:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-htkhcn_app} -d ${DB_NAME:-htkhcn}"]
       interval: 5s
@@ -40,17 +50,39 @@ services:
       DB_USERNAME: ${DB_USERNAME:-htkhcn_app}
       DB_PASSWORD: ${DB_PASSWORD:-htkhcn_app}
       JWT_SECRET: ${JWT_SECRET}
+      ADMIN_DEFAULT_USERNAME: ${ADMIN_DEFAULT_USERNAME:-admin}
+      ADMIN_DEFAULT_EMAIL: ${ADMIN_DEFAULT_EMAIL:-admin@dhkg.edu.vn}
+      ADMIN_DEFAULT_PASSWORD: ${ADMIN_DEFAULT_PASSWORD:-Admin@123}
       MAIL_HOST: ${MAIL_HOST:-smtp.gmail.com}
       MAIL_PORT: ${MAIL_PORT:-587}
       MAIL_USERNAME: ${MAIL_USERNAME:-}
       MAIL_PASSWORD: ${MAIL_PASSWORD:-}
       MAIL_ENABLED: ${MAIL_ENABLED:-false}
       APP_CORS_ORIGINS: ${APP_CORS_ORIGINS:-http://localhost:5173}
-    ports:
-      - "8080:8080"
+      CONGVAN_BASE_URL: ${CONGVAN_BASE_URL:-https://qlvb.vnkgu.edu.vn/api/v1/vanbannoibo}
+      CONGVAN_DEN_BASE_URL: ${CONGVAN_DEN_BASE_URL:-https://qlvb.vnkgu.edu.vn/api/v1/vanban-den}
+      CONGVAN_API_KEY: ${CONGVAN_API_KEY:-}
+    volumes:
+      - uploads:/app/data/uploads
 
-  # TODO (giai doan Frontend): them service `frontend` build React tinh + Nginx
-  # reverse proxy /api/... sang backend, dung dung dang SPEC muc 7.2.
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: ktkhcn_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    networks:
+      - default
+      - baota_net
+    ports:
+      - "127.0.0.1:${FRONTEND_PORT:-5280}:80"
+
+networks:
+  baota_net:
+    external: true
 
 volumes:
   pgdata:
+  uploads:

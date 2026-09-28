@@ -144,7 +144,7 @@ export function VanBanPage({ duongDan }: Props) {
     form.resetFields()
   }
 
-  function xuLySubmit(values: Record<string, unknown>) {
+  function xuLySubmit(values: any) {
     const body: VanBanRequest = {
       ...(values as VanBanRequest),
       ngayBanHanh: dayjs(values.ngayBanHanh as dayjs.Dayjs).format('YYYY-MM-DD'),
@@ -314,6 +314,11 @@ export function VanBanPage({ duongDan }: Props) {
                       Lưu
                     </Button>
                   </Form.Item>
+                  {!dangSua && (
+                    <Typography.Text type="secondary" style={{ fontSize: 12 }}>
+                      Sau khi lưu, mở lại để đính kèm file văn bản ở tab "File đính kèm".
+                    </Typography.Text>
+                  )}
                 </Form>
               ),
             },

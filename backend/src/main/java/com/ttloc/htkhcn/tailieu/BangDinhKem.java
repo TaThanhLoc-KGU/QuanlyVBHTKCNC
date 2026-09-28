@@ -8,7 +8,9 @@ public enum BangDinhKem {
     van_ban_dhkg(ModuleKey.VAN_BAN_DHKG),
     vbpl_vn(ModuleKey.VBPL_VN),
     mou(ModuleKey.MOU),
-    cong_van_den(ModuleKey.CONG_VAN_DEN);
+    cong_van_den(ModuleKey.CONG_VAN_DEN),
+    doan_vao(ModuleKey.DOAN_VAO),
+    doan_ra(ModuleKey.DOAN_RA);
 
     private final ModuleKey moduleKey;
 
