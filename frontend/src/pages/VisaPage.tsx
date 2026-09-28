@@ -22,6 +22,7 @@ import type { LoaiCapVisa, Visa, VisaRequest } from '../types'
 import { useAuth } from '../auth/AuthContext'
 import { thongBaoLoi } from '../api/client'
 import { AttachmentPanel } from '../components/AttachmentPanel'
+import { DoanVaoSelect } from '../components/DoanVaoSelect'
 import { TuDienSelect } from '../components/TuDienSelect'
 
 const NHAN_LOAI_CAP: Record<LoaiCapVisa, string> = { MOI: 'Cấp mới', GIA_HAN: 'Gia hạn' }
@@ -77,6 +78,7 @@ export function VisaPage() {
       ngayCap: dayjs(v.ngayCap),
       ngayHetHan: v.ngayHetHan ? dayjs(v.ngayHetHan) : undefined,
       mucDichTuDienId: v.mucDichTuDienId ?? undefined,
+      doanVaoId: v.doanVaoId ?? undefined,
     })
     setMoForm(true)
   }
@@ -158,6 +160,7 @@ export function VisaPage() {
             render: (v: string | null) => (v ? dayjs(v).format('DD/MM/YYYY') : '-'),
           },
           { title: 'Cơ quan cấp', dataIndex: 'coQuanCap', render: (v: string | null) => v ?? '-' },
+          { title: 'Đoàn vào liên quan', dataIndex: 'doanVaoTen', render: (v: string | null) => v ?? '-' },
           {
             title: 'Thao tác',
             width: 120,
@@ -205,6 +208,9 @@ export function VisaPage() {
                   </Form.Item>
                   <Form.Item name="mucDichTuDienId" label="Mục đích">
                     <TuDienSelect loai="MUC_DICH_DEN" placeholder="Chọn mục đích" />
+                  </Form.Item>
+                  <Form.Item name="doanVaoId" label="Đoàn vào liên quan (nếu có)">
+                    <DoanVaoSelect allowClear />
                   </Form.Item>
                   <Form.Item name="ghiChu" label="Ghi chú">
                     <Input.TextArea rows={2} />

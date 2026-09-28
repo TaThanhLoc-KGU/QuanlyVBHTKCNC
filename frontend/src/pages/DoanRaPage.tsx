@@ -23,6 +23,7 @@ import { thongBaoLoi } from '../api/client'
 import { AuditHistoryDrawer } from '../components/AuditHistoryDrawer'
 import { AttachmentPanel } from '../components/AttachmentPanel'
 import { DoiTacSelect } from '../components/DoiTacSelect'
+import { TuDienSelect } from '../components/TuDienSelect'
 
 export function DoanRaPage() {
   const { coTheSua } = useAuth()
@@ -72,6 +73,8 @@ export function DoanRaPage() {
       ...d,
       thoiGianDi: dayjs(d.thoiGianDi),
       thoiGianVe: dayjs(d.thoiGianVe),
+      mucTieuTuDienId: d.mucTieuTuDienId ?? undefined,
+      nguonKinhPhiTuDienId: d.nguonKinhPhiTuDienId ?? undefined,
     })
     setMoForm(true)
   }
@@ -142,6 +145,7 @@ export function DoanRaPage() {
           },
           { title: 'Số ngày', dataIndex: 'soNgay', width: 80 },
           { title: 'Số lượng đoàn', dataIndex: 'soLuongDoan', width: 100 },
+          { title: 'Mục tiêu', dataIndex: 'mucTieuTen', render: (v: string | null) => v ?? '-' },
           {
             title: 'Thao tác',
             width: 160,
@@ -206,6 +210,12 @@ export function DoanRaPage() {
                   </Form.Item>
                   <Form.Item name="thanhPhan" label="Thành phần (danh sách thành viên)">
                     <Input.TextArea rows={3} />
+                  </Form.Item>
+                  <Form.Item name="mucTieuTuDienId" label="Mục tiêu">
+                    <TuDienSelect loai="MUC_TIEU_DOAN_RA" placeholder="Chọn mục tiêu" />
+                  </Form.Item>
+                  <Form.Item name="nguonKinhPhiTuDienId" label="Nguồn kinh phí">
+                    <TuDienSelect loai="NGUON_KINH_PHI" placeholder="Chọn nguồn kinh phí" />
                   </Form.Item>
                   <Form.Item name="noiDungLamViec" label="Nội dung làm việc">
                     <Input.TextArea rows={3} />

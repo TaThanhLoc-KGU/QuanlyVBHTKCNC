@@ -50,4 +50,16 @@ public class DashboardTongQuan {
 
     @Column(name = "tong_luot_can_bo_di_cong_tac_nam_hien_tai")
     private Long tongLuotCanBoDiCongTacNamHienTai;
+
+    @Column(name = "tong_visa_con_hieu_luc")
+    private Long tongVisaConHieuLuc;
+
+    @Column(name = "tong_visa_nam_hien_tai")
+    private Long tongVisaNamHienTai;
+
+    @Column(name = "tong_su_kien_nam_hien_tai")
+    private Long tongSuKienNamHienTai;
+
+    @Column(name = "tong_doan_dia_phuong_nam_hien_tai")
+    private Long tongDoanDiaPhuongNamHienTai;
 }

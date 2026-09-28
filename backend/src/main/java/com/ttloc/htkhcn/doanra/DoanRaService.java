@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ttloc.htkhcn.common.SpecUtils;
 import com.ttloc.htkhcn.common.exception.BadRequestException;
 import com.ttloc.htkhcn.common.exception.ResourceNotFoundException;
+import com.ttloc.htkhcn.danhmuc.TuDien;
+import com.ttloc.htkhcn.danhmuc.TuDienRepository;
 import com.ttloc.htkhcn.doitac.DoiTac;
 import com.ttloc.htkhcn.doitac.DoiTacRepository;
 import com.ttloc.htkhcn.security.SecurityUser;
@@ -26,6 +28,7 @@ public class DoanRaService {
 
     private final DoanRaRepository doanRaRepository;
     private final DoiTacRepository doiTacRepository;
+    private final TuDienRepository tuDienRepository;
     private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
@@ -92,6 +95,18 @@ public class DoanRaService {
         d.setThanhPhan(request.thanhPhan());
         d.setQuocGiaLamViec(request.quocGiaLamViec());
         d.setNoiDungLamViec(request.noiDungLamViec());
+        d.setMucTieu(thamChieuTuDien(request.mucTieuTuDienId(), "muc tieu"));
+        d.setNguonKinhPhi(thamChieuTuDien(request.nguonKinhPhiTuDienId(), "nguon kinh phi"));
+    }
+
+    private TuDien thamChieuTuDien(UUID id, String ten) {
+        if (id == null) {
+            return null;
+        }
+        if (!tuDienRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Khong tim thay " + ten + " (tu dien): " + id);
+        }
+        return entityManager.getReference(TuDien.class, id);
     }
 
     private DoanRa timHoacLoi(UUID id) {

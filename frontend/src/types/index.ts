@@ -191,6 +191,10 @@ export interface Mou {
   daiDienKguKy: string | null
   thoiHanHieuLuc: string | null
   soCongVan: string | null
+  hoatDongKyKetTuDienId: string | null
+  hoatDongKyKetTen: string | null
+  ngonNguKyKetTuDienId: string | null
+  ngonNguKyKetTen: string | null
   trangThai: TrangThaiMou
   soNgayConLai: number | null
   nguoiTaoId: string | null
@@ -212,6 +216,8 @@ export interface MouRequest {
   daiDienKguKy?: string | null
   thoiHanHieuLuc?: string | null
   soCongVan?: string | null
+  hoatDongKyKetTuDienId?: string | null
+  ngonNguKyKetTuDienId?: string | null
 }
 
 // ---------- Doan vao / Doan ra ----------
@@ -227,6 +233,8 @@ export interface DoanVao {
   soLuongNguoiVietNam: number | null
   quocTich: string[]
   noiDungLamViec: string | null
+  mucDichTuDienId: string | null
+  mucDichTen: string | null
   nam: number
   soNgay: number
   nguoiTaoId: string | null
@@ -244,6 +252,7 @@ export interface DoanVaoRequest {
   soLuongNguoiVietNam?: number | null
   quocTich: string[]
   noiDungLamViec?: string | null
+  mucDichTuDienId?: string | null
 }
 
 export interface DoanRa {
@@ -258,6 +267,10 @@ export interface DoanRa {
   thanhPhan: string | null
   quocGiaLamViec: string
   noiDungLamViec: string | null
+  mucTieuTuDienId: string | null
+  mucTieuTen: string | null
+  nguonKinhPhiTuDienId: string | null
+  nguonKinhPhiTen: string | null
   nam: number
   soNgay: number
   nguoiTaoId: string | null
@@ -276,6 +289,8 @@ export interface DoanRaRequest {
   thanhPhan?: string | null
   quocGiaLamViec: string
   noiDungLamViec?: string | null
+  mucTieuTuDienId?: string | null
+  nguonKinhPhiTuDienId?: string | null
 }
 
 // ---------- Dinh kem ----------
@@ -409,6 +424,10 @@ export interface DashboardResponse {
   tongKhachNuocNgoaiNamHienTai: number
   tongDoanRaNamHienTai: number
   tongLuotCanBoDiCongTacNamHienTai: number
+  tongVisaConHieuLuc: number
+  tongVisaNamHienTai: number
+  tongSuKienNamHienTai: number
+  tongDoanDiaPhuongNamHienTai: number
   lamMoiLuc: string | null
   mouDenHanTheoThang: { thang: string; soLuong: number }[]
   widgetMouSapHetHan: MouWidgetDto[]

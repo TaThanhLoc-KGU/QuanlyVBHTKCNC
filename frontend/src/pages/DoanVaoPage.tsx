@@ -24,6 +24,7 @@ import { thongBaoLoi } from '../api/client'
 import { AuditHistoryDrawer } from '../components/AuditHistoryDrawer'
 import { AttachmentPanel } from '../components/AttachmentPanel'
 import { DoiTacSelect } from '../components/DoiTacSelect'
+import { TuDienSelect } from '../components/TuDienSelect'
 
 export function DoanVaoPage() {
   const { coTheSua } = useAuth()
@@ -74,6 +75,7 @@ export function DoanVaoPage() {
       ...d,
       thoiGianDen: dayjs(d.thoiGianDen),
       thoiGianDi: dayjs(d.thoiGianDi),
+      mucDichTuDienId: d.mucDichTuDienId ?? undefined,
     })
     setMoForm(true)
   }
@@ -144,6 +146,7 @@ export function DoanVaoPage() {
           },
           { title: 'Số ngày', dataIndex: 'soNgay', width: 80 },
           { title: 'Quốc tịch', dataIndex: 'quocTich', render: (v: string[]) => v.join(', ') },
+          { title: 'Mục đích', dataIndex: 'mucDichTen', render: (v: string | null) => v ?? '-' },
           { title: 'Khách NN', dataIndex: 'soLuongNguoiNuocNgoai', width: 90 },
           {
             title: 'Thao tác',
@@ -202,6 +205,9 @@ export function DoanVaoPage() {
                   </Space>
                   <Form.Item name="quocTich" label="Quốc tịch" rules={[{ required: true, message: 'Bắt buộc' }]}>
                     <Select mode="tags" placeholder="Nhập và Enter để thêm quốc tịch" />
+                  </Form.Item>
+                  <Form.Item name="mucDichTuDienId" label="Mục đích đến">
+                    <TuDienSelect loai="MUC_DICH_DEN" placeholder="Chọn mục đích" />
                   </Form.Item>
                   <Form.Item name="noiDungLamViec" label="Nội dung làm việc">
                     <Input.TextArea rows={3} />

@@ -15,6 +15,8 @@ public record DoanVaoResponse(
         Integer soLuongNguoiVietNam,
         String[] quocTich,
         String noiDungLamViec,
+        UUID mucDichTuDienId,
+        String mucDichTen,
         Integer nam,
         Integer soNgay,
         UUID nguoiTaoId,
@@ -29,7 +31,10 @@ public record DoanVaoResponse(
                 d.getDoiTac() != null ? d.getDoiTac().getTenDoiTac() : null,
                 d.getThoiGianDen(), d.getThoiGianDi(),
                 d.getSoLuongNguoiNuocNgoai(), d.getSoLuongNguoiVietNam(),
-                d.getQuocTich(), d.getNoiDungLamViec(), d.getNam(), d.getSoNgay(),
+                d.getQuocTich(), d.getNoiDungLamViec(),
+                d.getMucDich() != null ? d.getMucDich().getId() : null,
+                d.getMucDich() != null ? d.getMucDich().getTen() : null,
+                d.getNam(), d.getSoNgay(),
                 d.getNguoiTaoId(), d.getNgayTao(), d.getNguoiSuaId(), d.getNgaySua());
     }
 }

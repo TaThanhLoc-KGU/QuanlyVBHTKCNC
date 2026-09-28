@@ -16,6 +16,10 @@ public record DoanRaResponse(
         String thanhPhan,
         String quocGiaLamViec,
         String noiDungLamViec,
+        UUID mucTieuTuDienId,
+        String mucTieuTen,
+        UUID nguonKinhPhiTuDienId,
+        String nguonKinhPhiTen,
         Integer nam,
         Integer soNgay,
         UUID nguoiTaoId,
@@ -28,6 +32,10 @@ public record DoanRaResponse(
                 d.getId(), d.getDoiTac().getId(), d.getDoiTac().getTenDoiTac(),
                 d.getThoiGianDi(), d.getThoiGianVe(), d.getDiaDiemDi(), d.getDiaDiemDen(),
                 d.getSoLuongDoan(), d.getThanhPhan(), d.getQuocGiaLamViec(), d.getNoiDungLamViec(),
+                d.getMucTieu() != null ? d.getMucTieu().getId() : null,
+                d.getMucTieu() != null ? d.getMucTieu().getTen() : null,
+                d.getNguonKinhPhi() != null ? d.getNguonKinhPhi().getId() : null,
+                d.getNguonKinhPhi() != null ? d.getNguonKinhPhi().getTen() : null,
                 d.getNam(), d.getSoNgay(),
                 d.getNguoiTaoId(), d.getNgayTao(), d.getNguoiSuaId(), d.getNgaySua());
     }

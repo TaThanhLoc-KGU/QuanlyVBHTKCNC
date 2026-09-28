@@ -15,5 +15,6 @@ public record DoanVaoRequest(
         @NotNull(message = "So luong nguoi nuoc ngoai khong duoc de trong") Integer soLuongNguoiNuocNgoai,
         Integer soLuongNguoiVietNam,
         @NotEmpty(message = "Quoc tich khong duoc de trong") String[] quocTich,
-        String noiDungLamViec) {
+        String noiDungLamViec,
+        UUID mucDichTuDienId) {
 }

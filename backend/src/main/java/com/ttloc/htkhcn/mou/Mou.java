@@ -4,6 +4,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.ttloc.htkhcn.common.BaseAuditableEntity;
+import com.ttloc.htkhcn.danhmuc.TuDien;
 import com.ttloc.htkhcn.doitac.DoiTac;
 
 import jakarta.persistence.Column;
@@ -65,4 +66,12 @@ public class Mou extends BaseAuditableEntity {
 
     @Column(name = "so_cong_van")
     private String soCongVan;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hoat_dong_ky_ket_tu_dien_id")
+    private TuDien hoatDongKyKet;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ngon_ngu_ky_ket_tu_dien_id")
+    private TuDien ngonNguKyKet;
 }

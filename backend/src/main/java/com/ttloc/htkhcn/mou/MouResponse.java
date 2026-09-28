@@ -24,6 +24,10 @@ public record MouResponse(
         String daiDienKguKy,
         String thoiHanHieuLuc,
         String soCongVan,
+        UUID hoatDongKyKetTuDienId,
+        String hoatDongKyKetTen,
+        UUID ngonNguKyKetTuDienId,
+        String ngonNguKyKetTen,
         TrangThaiMou trangThai,
         Integer soNgayConLai,
         UUID nguoiTaoId,
@@ -38,6 +42,8 @@ public record MouResponse(
                 m.getNgayBanHanh(), m.getNgayHetHan(), m.getCaNhanDauMoi(), m.getDonViThucHien(),
                 m.getPhamViHopTac(), m.getLinhVucHopTac(), m.getDauMoiGhiTrongMou(),
                 m.getDaiDienKguKy(), m.getThoiHanHieuLuc(), m.getSoCongVan(),
+                m.getHoatDongKyKetTuDienId(), m.getHoatDongKyKetTen(),
+                m.getNgonNguKyKetTuDienId(), m.getNgonNguKyKetTen(),
                 m.getTrangThai(), m.getSoNgayConLai(),
                 m.getNguoiTaoId(), m.getNgayTao(), m.getNguoiSuaId(), m.getNgaySua());
     }

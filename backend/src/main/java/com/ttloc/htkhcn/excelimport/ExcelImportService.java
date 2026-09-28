@@ -288,7 +288,7 @@ public class ExcelImportService {
         var kq = timHoacDanhDauTaoMoiDoiTac(tenDoiTac, loaiDoiTacGoiY, quocGiaDoiTac);
         PhamViHopTac phamVi = chuanHoaPhamViHopTac(phamViText);
         MouRequest req = new MouRequest(kq.id, tenTaiLieu, ngayBanHanh, ngayHetHan, caNhanDauMoi, donViThucHien,
-                phamVi, linhVuc, dauMoiMou, daiDienKgu, thoiHan, soCongVan);
+                phamVi, linhVuc, dauMoiMou, daiDienKgu, thoiHan, soCongVan, null, null);
         return new ImportRowResult(soDong, duLieu, loi, req, kq.ghiChu);
     }
 
@@ -343,7 +343,7 @@ public class ExcelImportService {
         }
 
         DoanVaoRequest req = new DoanVaoRequest(tenDoan, doiTacId, thoiGianDen, thoiGianDi, soNuocNgoai, soVietNam,
-                quocTich, noiDung);
+                quocTich, noiDung, null);
         return new ImportRowResult(soDong, duLieu, loi, req, ghiChuGoiY);
     }
 
@@ -390,7 +390,7 @@ public class ExcelImportService {
         // suy ra chieu nay tu du lieu sheet.
         var kq = timHoacDanhDauTaoMoiDoiTac(tenDoiTac, LoaiDoiTac.NGOAI_NUOC, quocGiaLamViec);
         DoanRaRequest req = new DoanRaRequest(kq.id, thoiGianDi, thoiGianVe, diaDiemDi, diaDiemDen, soLuongDoan,
-                thanhPhan, quocGiaLamViec, noiDung);
+                thanhPhan, quocGiaLamViec, noiDung, null, null);
         return new ImportRowResult(soDong, duLieu, loi, req, kq.ghiChu);
     }
 

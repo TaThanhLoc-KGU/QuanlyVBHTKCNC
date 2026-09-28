@@ -6,6 +6,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.ttloc.htkhcn.common.BaseAuditableEntity;
+import com.ttloc.htkhcn.danhmuc.TuDien;
 import com.ttloc.htkhcn.doitac.DoiTac;
 
 import jakarta.persistence.Column;
@@ -50,6 +51,10 @@ public class DoanVao extends BaseAuditableEntity {
 
     @Column(name = "noi_dung_lam_viec")
     private String noiDungLamViec;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "muc_dich_tu_dien_id")
+    private TuDien mucDich;
 
     @Column(name = "nam", insertable = false, updatable = false)
     private Integer nam;

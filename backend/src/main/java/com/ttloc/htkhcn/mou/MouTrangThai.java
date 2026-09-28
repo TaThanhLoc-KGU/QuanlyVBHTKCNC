@@ -107,4 +107,16 @@ public class MouTrangThai {
 
     @Column(name = "so_ngay_con_lai")
     private Integer soNgayConLai;
+
+    @Column(name = "hoat_dong_ky_ket_tu_dien_id")
+    private UUID hoatDongKyKetTuDienId;
+
+    @Column(name = "hoat_dong_ky_ket_ten")
+    private String hoatDongKyKetTen;
+
+    @Column(name = "ngon_ngu_ky_ket_tu_dien_id")
+    private UUID ngonNguKyKetTuDienId;
+
+    @Column(name = "ngon_ngu_ky_ket_ten")
+    private String ngonNguKyKetTen;
 }

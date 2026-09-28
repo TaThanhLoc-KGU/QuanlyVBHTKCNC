@@ -15,5 +15,7 @@ public record DoanRaRequest(
         @NotNull(message = "So luong doan khong duoc de trong") Integer soLuongDoan,
         String thanhPhan,
         @NotBlank(message = "Quoc gia lam viec khong duoc de trong") String quocGiaLamViec,
-        String noiDungLamViec) {
+        String noiDungLamViec,
+        UUID mucTieuTuDienId,
+        UUID nguonKinhPhiTuDienId) {
 }

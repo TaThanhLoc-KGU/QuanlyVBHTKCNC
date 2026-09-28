@@ -1,10 +1,13 @@
 import type { ReactNode } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { Card, Col, Empty, List, Progress, Row, Skeleton, Statistic, Tag, Typography } from 'antd'
+import { Card, Col, Empty, List, Progress, Row, Skeleton, Tag, Typography } from 'antd'
 import {
   BankOutlined,
+  CalendarOutlined,
+  EnvironmentOutlined,
   FileTextOutlined,
   GlobalOutlined,
+  SafetyCertificateOutlined,
   SendOutlined,
   SolutionOutlined,
   TeamOutlined,
@@ -163,6 +166,44 @@ export function DashboardPage() {
               tieuDe="Lượt cán bộ đi công tác"
               giaTri={data.tongLuotCanBoDiCongTacNamHienTai}
               icon={<UserSwitchOutlined />}
+              mau="#155E75"
+            />
+          </Col>
+        </Row>
+      </div>
+
+      <div style={{ marginTop: 24 }}>
+        <NhanNhomThongKe>Visa, sự kiện &amp; đoàn địa phương (năm nay)</NhanNhomThongKe>
+        <Row gutter={[16, 16]}>
+          <Col xs={12} lg={6}>
+            <TheThongKe
+              tieuDe="Visa còn hiệu lực"
+              giaTri={data.tongVisaConHieuLuc}
+              icon={<SafetyCertificateOutlined />}
+              mau="#155E75"
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <TheThongKe
+              tieuDe="Visa cấp/gia hạn năm nay"
+              giaTri={data.tongVisaNamHienTai}
+              icon={<SafetyCertificateOutlined />}
+              mau="#155E75"
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <TheThongKe
+              tieuDe="Sự kiện (hội nghị, hội thảo...)"
+              giaTri={data.tongSuKienNamHienTai}
+              icon={<CalendarOutlined />}
+              mau="#155E75"
+            />
+          </Col>
+          <Col xs={12} lg={6}>
+            <TheThongKe
+              tieuDe="Đoàn đi địa phương"
+              giaTri={data.tongDoanDiaPhuongNamHienTai}
+              icon={<EnvironmentOutlined />}
               mau="#155E75"
             />
           </Col>

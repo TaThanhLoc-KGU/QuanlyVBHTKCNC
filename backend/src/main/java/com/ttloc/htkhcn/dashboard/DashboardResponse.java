@@ -13,6 +13,10 @@ public record DashboardResponse(
         long tongKhachNuocNgoaiNamHienTai,
         long tongDoanRaNamHienTai,
         long tongLuotCanBoDiCongTacNamHienTai,
+        long tongVisaConHieuLuc,
+        long tongVisaNamHienTai,
+        long tongSuKienNamHienTai,
+        long tongDoanDiaPhuongNamHienTai,
         Instant lamMoiLuc,
         List<MouTheoThangDto> mouDenHanTheoThang,
         List<MouWidgetDto> widgetMouSapHetHan) {

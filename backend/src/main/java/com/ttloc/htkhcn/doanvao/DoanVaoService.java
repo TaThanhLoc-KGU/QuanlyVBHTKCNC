@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ttloc.htkhcn.common.SpecUtils;
 import com.ttloc.htkhcn.common.exception.BadRequestException;
 import com.ttloc.htkhcn.common.exception.ResourceNotFoundException;
+import com.ttloc.htkhcn.danhmuc.TuDien;
+import com.ttloc.htkhcn.danhmuc.TuDienRepository;
 import com.ttloc.htkhcn.doitac.DoiTac;
 import com.ttloc.htkhcn.doitac.DoiTacRepository;
 import com.ttloc.htkhcn.security.SecurityUser;
@@ -26,6 +28,7 @@ public class DoanVaoService {
 
     private final DoanVaoRepository doanVaoRepository;
     private final DoiTacRepository doiTacRepository;
+    private final TuDienRepository tuDienRepository;
     private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
@@ -95,6 +98,14 @@ public class DoanVaoService {
         d.setSoLuongNguoiVietNam(request.soLuongNguoiVietNam());
         d.setQuocTich(request.quocTich());
         d.setNoiDungLamViec(request.noiDungLamViec());
+        if (request.mucDichTuDienId() != null) {
+            if (!tuDienRepository.existsById(request.mucDichTuDienId())) {
+                throw new ResourceNotFoundException("Khong tim thay muc dich (tu dien): " + request.mucDichTuDienId());
+            }
+            d.setMucDich(entityManager.getReference(TuDien.class, request.mucDichTuDienId()));
+        } else {
+            d.setMucDich(null);
+        }
     }
 
     private DoanVao timHoacLoi(UUID id) {

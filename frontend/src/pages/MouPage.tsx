@@ -24,6 +24,7 @@ import { thongBaoLoi } from '../api/client'
 import { AuditHistoryDrawer } from '../components/AuditHistoryDrawer'
 import { AttachmentPanel } from '../components/AttachmentPanel'
 import { DoiTacSelect } from '../components/DoiTacSelect'
+import { TuDienSelect } from '../components/TuDienSelect'
 
 const NHAN_TRANG_THAI: Record<TrangThaiMou, string> = {
   CON_HIEU_LUC: 'Còn hiệu lực',
@@ -86,6 +87,8 @@ export function MouPage() {
       ...m,
       ngayBanHanh: dayjs(m.ngayBanHanh),
       ngayHetHan: m.ngayHetHan ? dayjs(m.ngayHetHan) : undefined,
+      hoatDongKyKetTuDienId: m.hoatDongKyKetTuDienId ?? undefined,
+      ngonNguKyKetTuDienId: m.ngonNguKyKetTuDienId ?? undefined,
     })
     setMoForm(true)
   }
@@ -236,6 +239,12 @@ export function MouPage() {
                   </Form.Item>
                   <Form.Item name="linhVucHopTac" label="Lĩnh vực hợp tác">
                     <Input.TextArea rows={2} />
+                  </Form.Item>
+                  <Form.Item name="hoatDongKyKetTuDienId" label="Hoạt động ký kết">
+                    <TuDienSelect loai="HOAT_DONG_KY_KET" placeholder="Chọn hoạt động ký kết" />
+                  </Form.Item>
+                  <Form.Item name="ngonNguKyKetTuDienId" label="Ngôn ngữ ký kết">
+                    <TuDienSelect loai="NGON_NGU_KY_KET" placeholder="Chọn ngôn ngữ ký kết" />
                   </Form.Item>
                   <Form.Item name="dauMoiGhiTrongMou" label="Đầu mối ghi trong MoU">
                     <Input />

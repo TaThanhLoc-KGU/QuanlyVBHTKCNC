@@ -17,5 +17,7 @@ public record MouRequest(
         String dauMoiGhiTrongMou,
         String daiDienKguKy,
         String thoiHanHieuLuc,
-        String soCongVan) {
+        String soCongVan,
+        UUID hoatDongKyKetTuDienId,
+        UUID ngonNguKyKetTuDienId) {
 }

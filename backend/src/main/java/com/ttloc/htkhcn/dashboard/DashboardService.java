@@ -40,13 +40,16 @@ public class DashboardService {
         List<MouWidgetDto> widget = layWidgetMouSapHetHan();
 
         if (tq == null) {
-            return new DashboardResponse(0, 0, 0, 0, 0, 0, 0, 0, 0, null, theoThang, widget);
+            return new DashboardResponse(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, theoThang, widget);
         }
         return new DashboardResponse(
                 gt(tq.getTongVanBanDhkgHieuLuc()), gt(tq.getTongVbplVnHieuLuc()), gt(tq.getTongMouConHieuLuc()),
                 gt(tq.getTongMouSapHetHan()), gt(tq.getTongMouDaHetHan()), gt(tq.getTongDoanVaoNamHienTai()),
                 gt(tq.getTongKhachNuocNgoaiNamHienTai()), gt(tq.getTongDoanRaNamHienTai()),
-                gt(tq.getTongLuotCanBoDiCongTacNamHienTai()), tq.getLamMoiLuc(), theoThang, widget);
+                gt(tq.getTongLuotCanBoDiCongTacNamHienTai()),
+                gt(tq.getTongVisaConHieuLuc()), gt(tq.getTongVisaNamHienTai()),
+                gt(tq.getTongSuKienNamHienTai()), gt(tq.getTongDoanDiaPhuongNamHienTai()),
+                tq.getLamMoiLuc(), theoThang, widget);
     }
 
     private List<MouWidgetDto> layWidgetMouSapHetHan() {

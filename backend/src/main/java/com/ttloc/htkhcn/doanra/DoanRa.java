@@ -3,6 +3,7 @@ package com.ttloc.htkhcn.doanra;
 import java.time.LocalDate;
 
 import com.ttloc.htkhcn.common.BaseAuditableEntity;
+import com.ttloc.htkhcn.danhmuc.TuDien;
 import com.ttloc.htkhcn.doitac.DoiTac;
 
 import jakarta.persistence.Column;
@@ -49,6 +50,14 @@ public class DoanRa extends BaseAuditableEntity {
 
     @Column(name = "noi_dung_lam_viec")
     private String noiDungLamViec;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "muc_tieu_tu_dien_id")
+    private TuDien mucTieu;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "nguon_kinh_phi_tu_dien_id")
+    private TuDien nguonKinhPhi;
 
     @Column(name = "nam", insertable = false, updatable = false)
     private Integer nam;
