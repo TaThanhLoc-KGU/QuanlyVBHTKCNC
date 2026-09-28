@@ -1,5 +1,7 @@
 package com.ttloc.htkhcn.doitac;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,5 +11,6 @@ public record DoiTacRequest(
         String quocGia,
         String diaChi,
         String thongTinLienHe,
-        String ghiChu) {
+        String ghiChu,
+        UUID loaiTuDienId) {
 }

@@ -1,7 +1,16 @@
 import { api } from './client'
 import type { TaiLieuDinhKem } from '../types'
 
-export type BangDinhKem = 'van_ban_dhkg' | 'vbpl_vn' | 'mou' | 'cong_van_den' | 'doan_vao' | 'doan_ra'
+export type BangDinhKem =
+  | 'van_ban_dhkg'
+  | 'vbpl_vn'
+  | 'mou'
+  | 'cong_van_den'
+  | 'doan_vao'
+  | 'doan_ra'
+  | 'doan_dia_phuong'
+  | 'visa'
+  | 'su_kien'
 
 export function danhSachDinhKem(bang: BangDinhKem, banGhiId: string) {
   return api.get<TaiLieuDinhKem[]>('/tai-lieu-dinh-kem', { params: { bang, banGhiId } }).then((r) => r.data)

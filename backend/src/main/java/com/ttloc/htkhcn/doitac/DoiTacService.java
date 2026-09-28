@@ -14,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ttloc.htkhcn.common.SpecUtils;
 import com.ttloc.htkhcn.common.exception.BadRequestException;
 import com.ttloc.htkhcn.common.exception.ResourceNotFoundException;
+import com.ttloc.htkhcn.danhmuc.TuDien;
+import com.ttloc.htkhcn.danhmuc.TuDienRepository;
 import com.ttloc.htkhcn.security.SecurityUser;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +26,8 @@ import lombok.RequiredArgsConstructor;
 public class DoiTacService {
 
     private final DoiTacRepository doiTacRepository;
+    private final TuDienRepository tuDienRepository;
+    private final EntityManager entityManager;
 
     @Transactional(readOnly = true)
     public Page<DoiTacResponse> danhSach(LoaiDoiTac loaiDoiTac, String quocGia, String tuKhoa, Pageable pageable) {
@@ -95,6 +100,14 @@ public class DoiTacService {
         d.setDiaChi(request.diaChi());
         d.setThongTinLienHe(request.thongTinLienHe());
         d.setGhiChu(request.ghiChu());
+        if (request.loaiTuDienId() != null) {
+            if (!tuDienRepository.existsById(request.loaiTuDienId())) {
+                throw new ResourceNotFoundException("Khong tim thay loai doi tac (tu dien): " + request.loaiTuDienId());
+            }
+            d.setLoaiTuDien(entityManager.getReference(TuDien.class, request.loaiTuDienId()));
+        } else {
+            d.setLoaiTuDien(null);
+        }
     }
 
     private DoiTac timHoacLoi(UUID id) {

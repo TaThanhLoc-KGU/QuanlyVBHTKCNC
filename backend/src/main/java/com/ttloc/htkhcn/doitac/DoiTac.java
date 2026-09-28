@@ -4,11 +4,15 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import com.ttloc.htkhcn.common.BaseAuditableEntity;
+import com.ttloc.htkhcn.danhmuc.TuDien;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,4 +44,11 @@ public class DoiTac extends BaseAuditableEntity {
 
     @Column(name = "ghi_chu")
     private String ghiChu;
+
+    /** Phan loai BO SUNG tu tu_dien (loai=LOAI_DOI_TAC, vd Truong dai hoc/Vien
+     * nghien cuu/Doanh nghiep...) - KHONG thay the loaiDoiTac (Trong nuoc/
+     * Ngoai nuoc) o tren, khong bat buoc. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loai_tu_dien_id")
+    private TuDien loaiTuDien;
 }

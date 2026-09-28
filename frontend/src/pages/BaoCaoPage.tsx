@@ -6,6 +6,7 @@ import {
   Col,
   DatePicker,
   InputNumber,
+  Radio,
   Row,
   Space,
   Statistic,
@@ -18,7 +19,11 @@ import {
 import { FileExcelOutlined, FilePdfOutlined } from '@ant-design/icons'
 import dayjs, { type Dayjs } from 'dayjs'
 import * as baoCaoApi from '../api/baoCao'
-import type { LoaiDoiTac, TrangThaiMou } from '../types'
+import * as visaApi from '../api/visa'
+import * as suKienApi from '../api/suKien'
+import type { LoaiCapVisa, LoaiDoiTac, TrangThaiMou } from '../types'
+
+const NHAN_LOAI_CAP_VISA: Record<LoaiCapVisa, string> = { MOI: 'Cấp mới', GIA_HAN: 'Gia hạn' }
 
 const NHAN_TRANG_THAI: Record<TrangThaiMou, string> = {
   CON_HIEU_LUC: 'Còn hiệu lực',
@@ -109,9 +114,11 @@ function BaoCaoMouTrongNamTab() {
 }
 
 function BaoCaoDoanRaVaoTab() {
+  const [cheDo, setCheDo] = useState<'nam' | 'khoang'>('nam')
+  const [nam, setNam] = useState(dayjs().year())
   const [khoang, setKhoang] = useState<[Dayjs, Dayjs] | null>(null)
-  const tu = khoang?.[0]?.format('YYYY-MM-DD')
-  const den = khoang?.[1]?.format('YYYY-MM-DD')
+  const tu = cheDo === 'nam' ? `${nam}-01-01` : khoang?.[0]?.format('YYYY-MM-DD')
+  const den = cheDo === 'nam' ? `${nam}-12-31` : khoang?.[1]?.format('YYYY-MM-DD')
 
   const { data } = useQuery({
     queryKey: ['bc-doan-ra-vao', tu, den],
@@ -128,11 +135,19 @@ function BaoCaoDoanRaVaoTab() {
 
   return (
     <div>
-      <Space style={{ marginBottom: 16 }}>
-        <DatePicker.RangePicker
-          format="DD/MM/YYYY"
-          onChange={(v) => setKhoang(v && v[0] && v[1] ? [v[0], v[1]] : null)}
-        />
+      <Space style={{ marginBottom: 16 }} wrap>
+        <Radio.Group value={cheDo} onChange={(e) => setCheDo(e.target.value)}>
+          <Radio.Button value="nam">Theo năm</Radio.Button>
+          <Radio.Button value="khoang">Theo khoảng ngày</Radio.Button>
+        </Radio.Group>
+        {cheDo === 'nam' ? (
+          <InputNumber value={nam} onChange={(v) => setNam(v ?? dayjs().year())} />
+        ) : (
+          <DatePicker.RangePicker
+            format="DD/MM/YYYY"
+            onChange={(v) => setKhoang(v && v[0] && v[1] ? [v[0], v[1]] : null)}
+          />
+        )}
         <Button icon={<FileExcelOutlined />} onClick={() => xuat('EXCEL')}>
           Xuất Excel
         </Button>
@@ -255,6 +270,103 @@ function BaoCaoThoiHanMouTab() {
   )
 }
 
+function ThongKeVisaTab() {
+  const [nam, setNam] = useState(dayjs().year())
+  const { data, isLoading } = useQuery({
+    queryKey: ['tk-visa', nam],
+    queryFn: () => visaApi.danhSach({ nam, size: 1000 }),
+  })
+
+  const soMoi = data?.content.filter((v) => v.loaiCap === 'MOI').length ?? 0
+  const soGiaHan = data?.content.filter((v) => v.loaiCap === 'GIA_HAN').length ?? 0
+
+  return (
+    <div>
+      <Space style={{ marginBottom: 16 }}>
+        <Typography.Text>Năm:</Typography.Text>
+        <InputNumber value={nam} onChange={(v) => setNam(v ?? dayjs().year())} />
+      </Space>
+      <Row gutter={16} style={{ marginBottom: 16 }}>
+        <Col span={8}>
+          <Card>
+            <Statistic title="Tổng số visa" value={data?.totalElements ?? 0} />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card>
+            <Statistic title="Cấp mới" value={soMoi} />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card>
+            <Statistic title="Gia hạn" value={soGiaHan} />
+          </Card>
+        </Col>
+      </Row>
+      <Table
+        loading={isLoading}
+        rowKey="id"
+        size="small"
+        scroll={{ x: 'max-content' }}
+        dataSource={data?.content}
+        pagination={{ pageSize: 15 }}
+        columns={[
+          { title: 'Họ tên', dataIndex: 'hoTen' },
+          { title: 'Quốc tịch', dataIndex: 'quocTich', render: (v: string | null) => v ?? '-' },
+          { title: 'Loại cấp', dataIndex: 'loaiCap', render: (v: LoaiCapVisa) => NHAN_LOAI_CAP_VISA[v] },
+          { title: 'Ngày cấp', dataIndex: 'ngayCap', render: (v: string) => dayjs(v).format('DD/MM/YYYY') },
+        ]}
+      />
+    </div>
+  )
+}
+
+function ThongKeSuKienTab() {
+  const [nam, setNam] = useState(dayjs().year())
+  const { data, isLoading } = useQuery({
+    queryKey: ['tk-su-kien', nam],
+    queryFn: () => suKienApi.danhSach({ nam, size: 1000 }),
+  })
+
+  const tongThamGia = data?.content.reduce((tong, s) => tong + (s.soLuongThamGia ?? 0), 0) ?? 0
+
+  return (
+    <div>
+      <Space style={{ marginBottom: 16 }}>
+        <Typography.Text>Năm:</Typography.Text>
+        <InputNumber value={nam} onChange={(v) => setNam(v ?? dayjs().year())} />
+      </Space>
+      <Row gutter={16} style={{ marginBottom: 16 }}>
+        <Col span={8}>
+          <Card>
+            <Statistic title="Tổng số sự kiện" value={data?.totalElements ?? 0} />
+          </Card>
+        </Col>
+        <Col span={8}>
+          <Card>
+            <Statistic title="Tổng lượt tham gia" value={tongThamGia} />
+          </Card>
+        </Col>
+      </Row>
+      <Table
+        loading={isLoading}
+        rowKey="id"
+        size="small"
+        scroll={{ x: 'max-content' }}
+        dataSource={data?.content}
+        pagination={{ pageSize: 15 }}
+        columns={[
+          { title: 'Tên sự kiện', dataIndex: 'tenSuKien', ellipsis: true },
+          { title: 'Loại', dataIndex: 'loaiSuKienTen', render: (v: string | null) => v ?? '-' },
+          { title: 'Đơn vị tổ chức', dataIndex: 'donViToChuc', render: (v: string | null) => v ?? '-' },
+          { title: 'Bắt đầu', dataIndex: 'thoiGianBatDau', render: (v: string) => dayjs(v).format('DD/MM/YYYY') },
+          { title: 'Số lượng tham gia', dataIndex: 'soLuongThamGia', render: (v: number | null) => v ?? '-' },
+        ]}
+      />
+    </div>
+  )
+}
+
 export function BaoCaoPage() {
   return (
     <div>
@@ -263,6 +375,8 @@ export function BaoCaoPage() {
           { key: 'mou-trong-nam', label: 'MoU hợp tác trong năm', children: <BaoCaoMouTrongNamTab /> },
           { key: 'doan-ra-vao', label: 'Đoàn ra và đoàn khách vào', children: <BaoCaoDoanRaVaoTab /> },
           { key: 'thoi-han-mou', label: 'Thời hạn MoU theo đối tác', children: <BaoCaoThoiHanMouTab /> },
+          { key: 'tk-visa', label: 'Thống kê visa', children: <ThongKeVisaTab /> },
+          { key: 'tk-su-kien', label: 'Thống kê hội nghị, hội thảo', children: <ThongKeSuKienTab /> },
         ]}
       />
     </div>

@@ -16,6 +16,12 @@ import { CrawlPhapLuatPage } from './pages/CrawlPhapLuatPage'
 import { CongVanDongBoPage } from './pages/CongVanDongBoPage'
 import { CongVanDenPage } from './pages/CongVanDenPage'
 import { TuDienPage } from './pages/TuDienPage'
+import { ThanhVienPhuTrachPage } from './pages/ThanhVienPhuTrachPage'
+import { MauEmailPage } from './pages/MauEmailPage'
+import { DoanDiaPhuongPage } from './pages/DoanDiaPhuongPage'
+import { VisaPage } from './pages/VisaPage'
+import { SuKienPage } from './pages/SuKienPage'
+import { DoiTacCaNhanPage } from './pages/DoiTacCaNhanPage'
 
 export default function App() {
   return (
@@ -30,6 +36,11 @@ export default function App() {
           <Route path="/mou" element={<MouPage />} />
           <Route path="/doan-vao" element={<DoanVaoPage />} />
           <Route path="/doan-ra" element={<DoanRaPage />} />
+          <Route path="/doan-dia-phuong" element={<DoanDiaPhuongPage />} />
+          <Route path="/visa" element={<VisaPage />} />
+          <Route path="/su-kien" element={<SuKienPage />} />
+          <Route path="/doi-tac-ca-nhan" element={<DoiTacCaNhanPage />} />
+          <Route path="/thanh-vien-phu-trach" element={<ThanhVienPhuTrachPage />} />
           <Route path="/import" element={<ImportExcelPage />} />
           <Route path="/tu-dien" element={<TuDienPage />} />
           <Route path="/bao-cao" element={<BaoCaoPage />} />
@@ -46,6 +57,14 @@ export default function App() {
             element={
               <ChiAdmin>
                 <CauHinhPage />
+              </ChiAdmin>
+            }
+          />
+          <Route
+            path="/mau-email"
+            element={
+              <ChiAdmin>
+                <MauEmailPage />
               </ChiAdmin>
             }
           />

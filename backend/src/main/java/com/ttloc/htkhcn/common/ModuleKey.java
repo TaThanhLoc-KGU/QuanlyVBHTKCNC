@@ -9,5 +9,11 @@ public enum ModuleKey {
     DOAN_VAO,
     DOAN_RA,
     CONG_VAN_DEN,
-    TU_DIEN
+    TU_DIEN,
+    THANH_VIEN_PHU_TRACH,
+    MAU_EMAIL,
+    DOAN_DIA_PHUONG,
+    VISA,
+    SU_KIEN,
+    DOI_TAC_CA_NHAN
 }

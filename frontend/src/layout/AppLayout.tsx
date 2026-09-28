@@ -3,17 +3,23 @@ import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Avatar, Button, Drawer, Dropdown, Layout, Menu, Typography } from 'antd'
 import {
   BankOutlined,
+  CalendarOutlined,
   CloudSyncOutlined,
   BookOutlined,
+  ContactsOutlined,
   DashboardOutlined,
   DownOutlined,
+  EnvironmentOutlined,
   FileExcelOutlined,
   FileTextOutlined,
   GlobalOutlined,
+  IdcardOutlined,
   InboxOutlined,
   LockOutlined,
   LogoutOutlined,
+  MailOutlined,
   MenuOutlined,
+  SafetyCertificateOutlined,
   SendOutlined,
   SettingOutlined,
   SolutionOutlined,
@@ -76,14 +82,28 @@ export function AppLayout() {
           ]
         : []),
       { key: '/mou', icon: <SolutionOutlined />, label: <Link to="/mou">MoU</Link> },
+      { key: '/doi-tac-ca-nhan', icon: <ContactsOutlined />, label: <Link to="/doi-tac-ca-nhan">Đối tác cá nhân</Link> },
       { key: '/doan-vao', icon: <GlobalOutlined />, label: <Link to="/doan-vao">Đoàn vào</Link> },
       { key: '/doan-ra', icon: <SendOutlined />, label: <Link to="/doan-ra">Đoàn ra</Link> },
+      {
+        key: '/doan-dia-phuong',
+        icon: <EnvironmentOutlined />,
+        label: <Link to="/doan-dia-phuong">Đoàn đi địa phương</Link>,
+      },
+      { key: '/visa', icon: <SafetyCertificateOutlined />, label: <Link to="/visa">Visa</Link> },
+      { key: '/su-kien', icon: <CalendarOutlined />, label: <Link to="/su-kien">Sự kiện</Link> },
+      {
+        key: '/thanh-vien-phu-trach',
+        icon: <IdcardOutlined />,
+        label: <Link to="/thanh-vien-phu-trach">Thành viên phụ trách</Link>,
+      },
       { key: '/import', icon: <FileExcelOutlined />, label: <Link to="/import">Nhập Excel</Link> },
       { key: '/tu-dien', icon: <BookOutlined />, label: <Link to="/tu-dien">Tự điển</Link> },
       { key: '/bao-cao', icon: <BankOutlined />, label: <Link to="/bao-cao">Báo cáo</Link> },
       ...(laAdmin
         ? [
             { key: '/nguoi-dung', icon: <UserOutlined />, label: <Link to="/nguoi-dung">Tài khoản</Link> },
+            { key: '/mau-email', icon: <MailOutlined />, label: <Link to="/mau-email">Mẫu email</Link> },
             { key: '/cau-hinh', icon: <SettingOutlined />, label: <Link to="/cau-hinh">Cấu hình hệ thống</Link> },
           ]
         : []),

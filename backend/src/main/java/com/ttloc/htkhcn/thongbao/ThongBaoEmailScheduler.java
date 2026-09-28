@@ -12,6 +12,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ttloc.htkhcn.mauemail.MauEmail;
+import com.ttloc.htkhcn.mauemail.MauEmailRepository;
+import com.ttloc.htkhcn.mauemail.MauEmailService;
 import com.ttloc.htkhcn.user.NguoiDung;
 import com.ttloc.htkhcn.user.NguoiDungRepository;
 
@@ -33,8 +36,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ThongBaoEmailScheduler {
 
+    private static final String MA_MAU_THONG_BAO_MOU_GOP = "THONG_BAO_MOU_GOP";
+
     private final ThongBaoRepository thongBaoRepository;
     private final NguoiDungRepository nguoiDungRepository;
+    private final MauEmailRepository mauEmailRepository;
+    private final MauEmailService mauEmailService;
     private final JavaMailSender mailSender;
 
     @Value("${app.mail.enabled}")
@@ -75,24 +82,41 @@ public class ThongBaoEmailScheduler {
     }
 
     private void guiEmailGop(NguoiDung nguoiNhan, List<ThongBao> danhSach) {
+        StringBuilder danhSachChuoi = new StringBuilder();
+        for (ThongBao tb : danhSach) {
+            danhSachChuoi.append("- [").append(tb.getMucDo()).append("] ").append(tb.getTieuDe());
+            if (tb.getNoiDung() != null) {
+                danhSachChuoi.append(": ").append(tb.getNoiDung());
+            }
+            danhSachChuoi.append("\n");
+        }
+        Map<String, String> giaTri = Map.of(
+                "hoTen", nguoiNhan.getHoTen(),
+                "soLuong", String.valueOf(danhSach.size()),
+                "danhSach", danhSachChuoi.toString());
+
+        // Uu tien mau email tu quan tri (mau_email, quan ly qua man hinh Mau
+        // email) - fallback ve noi dung code cung neu chua cau hinh mau, de
+        // KHONG lam hong tinh nang gui email dang chay san.
+        var mauTuyChon = mauEmailRepository.findByMaAndHoatDongTrue(MA_MAU_THONG_BAO_MOU_GOP);
+        String tieuDe;
+        String noiDung;
+        if (mauTuyChon.isPresent()) {
+            MauEmail mau = mauTuyChon.get();
+            tieuDe = mauEmailService.thayThe(mau.getTieuDe(), giaTri);
+            noiDung = mauEmailService.thayThe(mau.getNoiDung(), giaTri);
+        } else {
+            tieuDe = "[P.HTKHCN] Ban co " + danhSach.size() + " thong bao MoU can luu y";
+            noiDung = "Xin chao " + nguoiNhan.getHoTen() + ",\n\n"
+                    + "He thong ghi nhan cac thong bao sau:\n\n" + danhSachChuoi
+                    + "\nVui long dang nhap he thong de xem chi tiet.\n";
+        }
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailFrom);
         message.setTo(nguoiNhan.getEmail());
-        message.setSubject("[P.HTKHCN] Ban co " + danhSach.size() + " thong bao MoU can luu y");
-
-        StringBuilder noiDung = new StringBuilder();
-        noiDung.append("Xin chao ").append(nguoiNhan.getHoTen()).append(",\n\n");
-        noiDung.append("He thong ghi nhan cac thong bao sau:\n\n");
-        for (ThongBao tb : danhSach) {
-            noiDung.append("- [").append(tb.getMucDo()).append("] ").append(tb.getTieuDe());
-            if (tb.getNoiDung() != null) {
-                noiDung.append(": ").append(tb.getNoiDung());
-            }
-            noiDung.append("\n");
-        }
-        noiDung.append("\nVui long dang nhap he thong de xem chi tiet.\n");
-        message.setText(noiDung.toString());
-
+        message.setSubject(tieuDe);
+        message.setText(noiDung);
         mailSender.send(message);
     }
 }

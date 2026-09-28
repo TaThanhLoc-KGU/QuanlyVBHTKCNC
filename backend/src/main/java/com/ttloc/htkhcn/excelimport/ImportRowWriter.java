@@ -92,6 +92,8 @@ public class ImportRowWriter {
                     "Cong van den khong ho tro nhap tu Excel");
             case TU_DIEN -> throw new com.ttloc.htkhcn.common.exception.BadRequestException(
                     "Tu dien khong ho tro nhap tu Excel");
+            case THANH_VIEN_PHU_TRACH, MAU_EMAIL, DOAN_DIA_PHUONG, VISA, SU_KIEN, DOI_TAC_CA_NHAN ->
+                    throw new com.ttloc.htkhcn.common.exception.BadRequestException("Module nay khong ho tro nhap tu Excel");
         };
         phienImportBanGhiService.ghiNhan(phienId, moDun, idMoi);
         return idMoi;

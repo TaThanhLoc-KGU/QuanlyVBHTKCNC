@@ -11,7 +11,6 @@ import {
   Space,
   Table,
   Tag,
-  Typography,
   message,
 } from 'antd'
 import { DeleteOutlined, EditOutlined, HistoryOutlined, PlusOutlined } from '@ant-design/icons'
@@ -20,6 +19,7 @@ import type { DoiTac, DoiTacRequest, LoaiDoiTac } from '../types'
 import { useAuth } from '../auth/AuthContext'
 import { thongBaoLoi } from '../api/client'
 import { AuditHistoryDrawer } from '../components/AuditHistoryDrawer'
+import { TuDienSelect } from '../components/TuDienSelect'
 
 const NHAN_LOAI: Record<LoaiDoiTac, string> = { TRONG_NUOC: 'Trong nước', NGOAI_NUOC: 'Ngoài nước' }
 
@@ -144,6 +144,12 @@ export function DoiTacPage() {
             width: 120,
             render: (v: LoaiDoiTac) => <Tag color={v === 'NGOAI_NUOC' ? 'blue' : 'default'}>{NHAN_LOAI[v]}</Tag>,
           },
+          {
+            title: 'Loại (chi tiết)',
+            dataIndex: 'loaiTuDienTen',
+            width: 150,
+            render: (v: string | null) => v ?? '-',
+          },
           { title: 'Quốc gia', dataIndex: 'quocGia', width: 140 },
           { title: 'Địa chỉ', dataIndex: 'diaChi', ellipsis: true },
           {
@@ -211,6 +217,9 @@ export function DoiTacPage() {
             ]}
           >
             <Input />
+          </Form.Item>
+          <Form.Item name="loaiTuDienId" label="Loại đối tác (chi tiết)">
+            <TuDienSelect loai="LOAI_DOI_TAC" placeholder="Trường đại học, Doanh nghiệp..." />
           </Form.Item>
           <Form.Item name="diaChi" label="Địa chỉ">
             <Input.TextArea rows={2} />

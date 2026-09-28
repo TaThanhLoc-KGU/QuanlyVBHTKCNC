@@ -174,6 +174,8 @@ public class ExcelImportService {
                     "Cong van den khong ho tro nhap tu Excel - du lieu duoc dong bo tu he thong CongVan cua truong");
             case TU_DIEN -> throw new BadRequestException(
                     "Tu dien khong ho tro nhap tu Excel - quan ly truc tiep qua man hinh Tu dien");
+            case THANH_VIEN_PHU_TRACH, MAU_EMAIL, DOAN_DIA_PHUONG, VISA, SU_KIEN, DOI_TAC_CA_NHAN ->
+                    throw new BadRequestException("Module nay khong ho tro nhap tu Excel");
         };
     }
 
@@ -202,7 +204,7 @@ public class ExcelImportService {
             return new ImportRowResult(soDong, duLieu, loi, null, null);
         }
         return new ImportRowResult(soDong, duLieu, loi,
-                new DoiTacRequest(ten, loai, quocGia, diaChi, lienHe, ghiChu), null);
+                new DoiTacRequest(ten, loai, quocGia, diaChi, lienHe, ghiChu, null), null);
     }
 
     // ---------- Van ban DHKG / VBPL VN ----------

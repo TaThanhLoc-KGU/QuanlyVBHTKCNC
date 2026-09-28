@@ -10,7 +10,10 @@ public enum BangDinhKem {
     mou(ModuleKey.MOU),
     cong_van_den(ModuleKey.CONG_VAN_DEN),
     doan_vao(ModuleKey.DOAN_VAO),
-    doan_ra(ModuleKey.DOAN_RA);
+    doan_ra(ModuleKey.DOAN_RA),
+    doan_dia_phuong(ModuleKey.DOAN_DIA_PHUONG),
+    visa(ModuleKey.VISA),
+    su_kien(ModuleKey.SU_KIEN);
 
     private final ModuleKey moduleKey;
 

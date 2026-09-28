@@ -10,6 +10,12 @@ export type ModuleKey =
   | 'DOAN_RA'
   | 'CONG_VAN_DEN'
   | 'TU_DIEN'
+  | 'THANH_VIEN_PHU_TRACH'
+  | 'MAU_EMAIL'
+  | 'DOAN_DIA_PHUONG'
+  | 'VISA'
+  | 'SU_KIEN'
+  | 'DOI_TAC_CA_NHAN'
 
 export type LoaiTuDien =
   | 'MUC_TIEU_DOAN_RA'
@@ -89,6 +95,8 @@ export interface DoiTac {
   diaChi: string | null
   thongTinLienHe: string | null
   ghiChu: string | null
+  loaiTuDienId: string | null
+  loaiTuDienTen: string | null
   nguoiTaoId: string | null
   ngayTao: string
   nguoiSuaId: string | null
@@ -102,6 +110,7 @@ export interface DoiTacRequest {
   diaChi?: string | null
   thongTinLienHe?: string | null
   ghiChu?: string | null
+  loaiTuDienId?: string | null
 }
 
 // ---------- Danh muc loai van ban ----------
@@ -403,6 +412,192 @@ export interface DashboardResponse {
   lamMoiLuc: string | null
   mouDenHanTheoThang: { thang: string; soLuong: number }[]
   widgetMouSapHetHan: MouWidgetDto[]
+}
+
+// ---------- Thanh vien phu trach ----------
+
+export interface ThanhVienPhuTrach {
+  id: string
+  hoTen: string
+  chucVu: string | null
+  donVi: string | null
+  email: string | null
+  dienThoai: string | null
+  vaiTroTuDienId: string | null
+  vaiTroTen: string | null
+  ghiChu: string | null
+  hoatDong: boolean
+  ngayTao: string
+  ngaySua: string | null
+}
+
+export interface ThanhVienPhuTrachRequest {
+  hoTen: string
+  chucVu?: string | null
+  donVi?: string | null
+  email?: string | null
+  dienThoai?: string | null
+  vaiTroTuDienId?: string | null
+  ghiChu?: string | null
+  hoatDong?: boolean | null
+}
+
+// ---------- Mau email ----------
+
+export interface MauEmail {
+  id: string
+  ma: string
+  tenMau: string
+  tieuDe: string
+  noiDung: string
+  moTa: string | null
+  hoatDong: boolean
+  ngayTao: string
+  ngaySua: string | null
+}
+
+export interface MauEmailRequest {
+  ma: string
+  tenMau: string
+  tieuDe: string
+  noiDung: string
+  moTa?: string | null
+  hoatDong?: boolean | null
+}
+
+// ---------- Doan di dia phuong ----------
+
+export interface DoanDiaPhuong {
+  id: string
+  tenDoan: string
+  doiTacId: string | null
+  tenDoiTac: string | null
+  thoiGianDi: string
+  thoiGianVe: string
+  diaDiem: string | null
+  mucTieuTuDienId: string | null
+  mucTieuTen: string | null
+  nguonKinhPhiTuDienId: string | null
+  nguonKinhPhiTen: string | null
+  thanhPhan: string | null
+  noiDungLamViec: string | null
+  ghiChu: string | null
+  nam: number
+  nguoiTaoId: string | null
+  ngayTao: string
+  nguoiSuaId: string | null
+  ngaySua: string | null
+}
+
+export interface DoanDiaPhuongRequest {
+  tenDoan: string
+  doiTacId?: string | null
+  thoiGianDi: string
+  thoiGianVe: string
+  diaDiem?: string | null
+  mucTieuTuDienId?: string | null
+  nguonKinhPhiTuDienId?: string | null
+  thanhPhan?: string | null
+  noiDungLamViec?: string | null
+  ghiChu?: string | null
+}
+
+// ---------- Visa ----------
+
+export type LoaiCapVisa = 'MOI' | 'GIA_HAN'
+
+export interface Visa {
+  id: string
+  hoTen: string
+  quocTich: string | null
+  loaiCap: LoaiCapVisa
+  ngayCap: string
+  ngayHetHan: string | null
+  coQuanCap: string | null
+  mucDichTuDienId: string | null
+  mucDichTen: string | null
+  doanVaoId: string | null
+  doanVaoTen: string | null
+  ghiChu: string | null
+  nam: number
+  nguoiTaoId: string | null
+  ngayTao: string
+  nguoiSuaId: string | null
+  ngaySua: string | null
+}
+
+export interface VisaRequest {
+  hoTen: string
+  quocTich?: string | null
+  loaiCap: LoaiCapVisa
+  ngayCap: string
+  ngayHetHan?: string | null
+  coQuanCap?: string | null
+  mucDichTuDienId?: string | null
+  doanVaoId?: string | null
+  ghiChu?: string | null
+}
+
+// ---------- Su kien (gop Hoi nghi/Hoi thao + Thong tin su kien) ----------
+
+export interface SuKien {
+  id: string
+  tenSuKien: string
+  loaiSuKienTuDienId: string | null
+  loaiSuKienTen: string | null
+  linhVucTuDienId: string | null
+  linhVucTen: string | null
+  thoiGianBatDau: string
+  thoiGianKetThuc: string | null
+  diaDiem: string | null
+  donViToChuc: string | null
+  soLuongThamGia: number | null
+  noiDung: string | null
+  ghiChu: string | null
+  nam: number
+  nguoiTaoId: string | null
+  ngayTao: string
+  nguoiSuaId: string | null
+  ngaySua: string | null
+}
+
+export interface SuKienRequest {
+  tenSuKien: string
+  loaiSuKienTuDienId?: string | null
+  linhVucTuDienId?: string | null
+  thoiGianBatDau: string
+  thoiGianKetThuc?: string | null
+  diaDiem?: string | null
+  donViToChuc?: string | null
+  soLuongThamGia?: number | null
+  noiDung?: string | null
+  ghiChu?: string | null
+}
+
+// ---------- Doi tac ca nhan ----------
+
+export interface DoiTacCaNhan {
+  id: string
+  hoTen: string
+  chucVu: string | null
+  doiTacId: string | null
+  tenDoiTac: string | null
+  email: string | null
+  dienThoai: string | null
+  ghiChu: string | null
+  hoatDong: boolean
+  ngayTao: string
+  ngaySua: string | null
+}
+
+export interface DoiTacCaNhanRequest {
+  hoTen: string
+  chucVu?: string | null
+  doiTacId?: string | null
+  email?: string | null
+  dienThoai?: string | null
+  ghiChu?: string | null
+  hoatDong?: boolean | null
 }
 
 // ---------- Lich su thay doi ----------

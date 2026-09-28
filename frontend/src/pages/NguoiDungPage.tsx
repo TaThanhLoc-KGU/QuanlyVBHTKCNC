@@ -30,6 +30,11 @@ const TUY_CHON_MODULE: { value: ModuleKey; label: string }[] = [
   { value: 'DOAN_RA', label: 'Đoàn ra' },
   { value: 'CONG_VAN_DEN', label: 'Công văn đến' },
   { value: 'TU_DIEN', label: 'Tự điển' },
+  { value: 'DOI_TAC_CA_NHAN', label: 'Đối tác cá nhân' },
+  { value: 'DOAN_DIA_PHUONG', label: 'Đoàn đi địa phương' },
+  { value: 'VISA', label: 'Visa' },
+  { value: 'SU_KIEN', label: 'Sự kiện' },
+  { value: 'THANH_VIEN_PHU_TRACH', label: 'Thành viên phụ trách' },
 ]
 
 const NHAN_MODULE: Record<ModuleKey, string> = Object.fromEntries(
