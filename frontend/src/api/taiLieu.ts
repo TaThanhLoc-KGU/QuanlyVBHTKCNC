@@ -11,6 +11,7 @@ export type BangDinhKem =
   | 'doan_dia_phuong'
   | 'visa'
   | 'su_kien'
+  | 'de_tai'
 
 export function danhSachDinhKem(bang: BangDinhKem, banGhiId: string) {
   return api.get<TaiLieuDinhKem[]>('/tai-lieu-dinh-kem', { params: { bang, banGhiId } }).then((r) => r.data)

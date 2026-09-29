@@ -92,6 +92,7 @@ export function AppLayout() {
       },
       { key: '/visa', icon: <SafetyCertificateOutlined />, label: <Link to="/visa">Visa</Link> },
       { key: '/su-kien', icon: <CalendarOutlined />, label: <Link to="/su-kien">Sự kiện</Link> },
+      { key: '/de-tai', icon: <BookOutlined />, label: <Link to="/de-tai">Đề tài NCKH</Link> },
       {
         key: '/thanh-vien-phu-trach',
         icon: <IdcardOutlined />,

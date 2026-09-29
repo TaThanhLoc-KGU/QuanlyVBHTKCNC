@@ -28,6 +28,7 @@ const TUY_CHON_MODULE: { value: ModuleKey; label: string }[] = [
   { value: 'MOU', label: 'MoU' },
   { value: 'DOAN_VAO', label: 'Đoàn vào' },
   { value: 'DOAN_RA', label: 'Đoàn ra' },
+  { value: 'DE_TAI_NCKH', label: 'Đề tài NCKH (đã thực hiện)' },
 ]
 
 const NHAN_MODULE: Record<ModuleKey, string> = Object.fromEntries(

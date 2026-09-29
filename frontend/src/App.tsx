@@ -22,6 +22,8 @@ import { DoanDiaPhuongPage } from './pages/DoanDiaPhuongPage'
 import { VisaPage } from './pages/VisaPage'
 import { SuKienPage } from './pages/SuKienPage'
 import { DoiTacCaNhanPage } from './pages/DoiTacCaNhanPage'
+import { DeTaiPage } from './pages/DeTaiPage'
+import { DeTaiChiTietPage } from './pages/DeTaiChiTietPage'
 
 export default function App() {
   return (
@@ -40,6 +42,8 @@ export default function App() {
           <Route path="/visa" element={<VisaPage />} />
           <Route path="/su-kien" element={<SuKienPage />} />
           <Route path="/doi-tac-ca-nhan" element={<DoiTacCaNhanPage />} />
+          <Route path="/de-tai" element={<DeTaiPage />} />
+          <Route path="/de-tai/:id" element={<DeTaiChiTietPage />} />
           <Route path="/thanh-vien-phu-trach" element={<ThanhVienPhuTrachPage />} />
           <Route path="/import" element={<ImportExcelPage />} />
           <Route path="/tu-dien" element={<TuDienPage />} />

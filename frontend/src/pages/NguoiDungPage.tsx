@@ -35,6 +35,7 @@ const TUY_CHON_MODULE: { value: ModuleKey; label: string }[] = [
   { value: 'VISA', label: 'Visa' },
   { value: 'SU_KIEN', label: 'Sự kiện' },
   { value: 'THANH_VIEN_PHU_TRACH', label: 'Thành viên phụ trách' },
+  { value: 'DE_TAI_NCKH', label: 'Đề tài dự án NCKH' },
 ]
 
 const NHAN_MODULE: Record<ModuleKey, string> = Object.fromEntries(

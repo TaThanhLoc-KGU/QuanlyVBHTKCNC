@@ -48,6 +48,7 @@ public class ImportRowWriter {
     private final PhienImportBanGhiService phienImportBanGhiService;
     private final PhienImportRepository phienImportRepository;
     private final DoiTacRepository doiTacRepository;
+    private final com.ttloc.htkhcn.detai.DeTaiService deTaiService;
 
     // REQUIRES_NEW de LUON commit ngay, bat ke co dang o trong 1 transaction
     // bao ngoai (test @Transactional cua BaseIntegrationTest) hay khong - cac
@@ -88,6 +89,7 @@ public class ImportRowWriter {
             case MOU -> mouService.tao((MouRequest) doiTuong).id();
             case DOAN_VAO -> doanVaoService.tao((DoanVaoRequest) doiTuong).id();
             case DOAN_RA -> doanRaService.tao((DoanRaRequest) doiTuong).id();
+            case DE_TAI_NCKH -> ghiDeTaiDaThucHien((com.ttloc.htkhcn.detai.DeTaiRequest) doiTuong);
             case CONG_VAN_DEN -> throw new com.ttloc.htkhcn.common.exception.BadRequestException(
                     "Cong van den khong ho tro nhap tu Excel");
             case TU_DIEN -> throw new com.ttloc.htkhcn.common.exception.BadRequestException(
@@ -97,5 +99,14 @@ public class ImportRowWriter {
         };
         phienImportBanGhiService.ghiNhan(phienId, moDun, idMoi);
         return idMoi;
+    }
+
+    // De tai import tu Excel la de tai DA THUC HIEN (yeu cau nguoi dung) - tao
+    // xong chuyen luon trang thai sang "Da nghiem thu" thay vi de mac dinh
+    // "De xuat" cua luong tao moi binh thuong tren UI.
+    private UUID ghiDeTaiDaThucHien(com.ttloc.htkhcn.detai.DeTaiRequest request) {
+        var res = deTaiService.tao(request);
+        deTaiService.capNhatTrangThai(res.id(), com.ttloc.htkhcn.detai.TrangThaiDeTai.DA_NGHIEM_THU, null);
+        return res.id();
     }
 }

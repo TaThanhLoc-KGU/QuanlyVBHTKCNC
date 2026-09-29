@@ -15,5 +15,6 @@ public enum ModuleKey {
     DOAN_DIA_PHUONG,
     VISA,
     SU_KIEN,
-    DOI_TAC_CA_NHAN
+    DOI_TAC_CA_NHAN,
+    DE_TAI_NCKH
 }

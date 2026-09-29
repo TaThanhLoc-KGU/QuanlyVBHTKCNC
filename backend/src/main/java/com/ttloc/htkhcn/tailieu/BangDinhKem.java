@@ -13,7 +13,8 @@ public enum BangDinhKem {
     doan_ra(ModuleKey.DOAN_RA),
     doan_dia_phuong(ModuleKey.DOAN_DIA_PHUONG),
     visa(ModuleKey.VISA),
-    su_kien(ModuleKey.SU_KIEN);
+    su_kien(ModuleKey.SU_KIEN),
+    de_tai(ModuleKey.DE_TAI_NCKH);
 
     private final ModuleKey moduleKey;
 

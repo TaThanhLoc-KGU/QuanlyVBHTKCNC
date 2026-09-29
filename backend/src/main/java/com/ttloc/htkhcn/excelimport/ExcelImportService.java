@@ -113,7 +113,8 @@ public class ExcelImportService {
             ModuleKey.VBPL_VN, List.of("VBPL VN"),
             ModuleKey.MOU, List.of("MoU"),
             ModuleKey.DOAN_VAO, List.of("Doan vao"),
-            ModuleKey.DOAN_RA, List.of("Doan ra"));
+            ModuleKey.DOAN_RA, List.of("Doan ra"),
+            ModuleKey.DE_TAI_NCKH, List.of("De tai", "De tai NCKH"));
 
     private Sheet timSheet(Workbook wb, ModuleKey moDun) {
         List<String> tenUngVien = TEN_SHEET_UNG_VIEN.getOrDefault(moDun, List.of());
@@ -174,9 +175,43 @@ public class ExcelImportService {
                     "Cong van den khong ho tro nhap tu Excel - du lieu duoc dong bo tu he thong CongVan cua truong");
             case TU_DIEN -> throw new BadRequestException(
                     "Tu dien khong ho tro nhap tu Excel - quan ly truc tiep qua man hinh Tu dien");
+            case DE_TAI_NCKH -> parseDeTai(row, header, soDong);
             case THANH_VIEN_PHU_TRACH, MAU_EMAIL, DOAN_DIA_PHUONG, VISA, SU_KIEN, DOI_TAC_CA_NHAN ->
                     throw new BadRequestException("Module nay khong ho tro nhap tu Excel");
         };
+    }
+
+    // ---------- De tai NCKH (nhap du lieu de tai da thuc hien cac nam truoc) ----------
+
+    private ImportRowResult parseDeTai(Row row, Map<String, Integer> h, int soDong) {
+        List<String> loi = new ArrayList<>();
+        String tenDeTai = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Ten de tai"));
+        String maDeTai = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Ma de tai"));
+        String chuNhiem = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Chu nhiem", "Chu nhiem de tai"));
+        String donViThucHien = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "Don vi thuc hien"));
+        Integer namDeXuat = ExcelUtils.getCellInt(row, ExcelUtils.timCot(h, "Nam de xuat", "Nam"));
+        LocalDate thoiGianBatDau = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian bat dau"));
+        LocalDate thoiGianKetThuc = ExcelUtils.getCellDate(row, ExcelUtils.timCot(h, "Thoi gian ket thuc"));
+        String sanPhamDuKien = ExcelUtils.getCellString(row, ExcelUtils.timCot(h, "San pham", "San pham du kien"));
+
+        if (tenDeTai == null || tenDeTai.isBlank()) {
+            loi.add("Thieu Ten de tai");
+        }
+
+        Map<String, Object> duLieu = mapDuLieu("tenDeTai", tenDeTai, "maDeTai", maDeTai, "namDeXuat", namDeXuat);
+        if (!loi.isEmpty()) {
+            return new ImportRowResult(soDong, duLieu, loi, null, null);
+        }
+
+        // De tai import tu file la de tai DA THUC HIEN (theo yeu cau nguoi dung),
+        // nen mac dinh trang thai "Da nghiem thu" thay vi "De xuat" - nguoi dung
+        // co the sua lai tung dong sau khi import neu can.
+        com.ttloc.htkhcn.detai.DeTaiRequest req = new com.ttloc.htkhcn.detai.DeTaiRequest(
+                maDeTai, tenDeTai, null, chuNhiem, donViThucHien, null,
+                null, null, null, null,
+                namDeXuat, thoiGianBatDau, thoiGianKetThuc,
+                null, null, null, null, sanPhamDuKien, null, null);
+        return new ImportRowResult(soDong, duLieu, loi, req, null);
     }
 
     // ---------- Doi tac ----------
